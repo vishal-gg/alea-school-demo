@@ -148,14 +148,15 @@
     .canvas-2-section,
     .canvas-3-section,
     .canvas-4-section,
-    .canvas-5-section {
+    .canvas-5-section,
+    .canvas-6-section {
       position: relative;
       height: 150vh;
     }
 
     /* Canvas-2 section */
     .canvas-2-section {
-      height: 300vh;
+      height: 200vh;
     }
 
     .canvas-container {
@@ -173,7 +174,8 @@
     #frame-canvas-2,
     #frame-canvas-3,
     #frame-canvas-4,
-    #frame-canvas-5 {
+    #frame-canvas-5,
+    #frame-canvas-6 {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -230,7 +232,8 @@
     .scene-3-section,
     .scene-4-section,
     .scene-5-section,
-    .scene-6-section {
+    .scene-6-section,
+    .scene-7-section {
       position: relative;
       height: 100vh;
       display: none;
@@ -242,7 +245,8 @@
     .scene-3-video,
     .scene-4-video,
     .scene-5-video,
-    .scene-6-video {
+    .scene-6-video,
+    .scene-7-video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -259,7 +263,8 @@
     .scene-3-section,
     .scene-4-section,
     .scene-5-section,
-    .scene-6-section {
+    .scene-6-section,
+    .scene-7-section {
       .pause-overlay {
         position: absolute;
         top: 50%;
@@ -438,13 +443,13 @@
       <button data-scene="3">
         <img src="/icons/scene-titles/ALEA-ARENA-BLUE.webp" alt="">
       </button>
-      <button data-scene="4">
+      <button data-scene="5">
         <img src="/icons/scene-titles/DOJO-BLUE.webp" alt="">
       </button>
-      <button data-scene="5">
+      <button data-scene="6">
         <img src="/icons/scene-titles/ATELIER-BLUE.webp" alt="">
       </button>
-      <button data-scene="6">
+      <button data-scene="7">
         <img src="/icons/scene-titles/PALM-HOUSE-BLUE.webp" alt="">
       </button>
     </nav>
@@ -621,13 +626,46 @@
           <span class="text">Scroll</span>
         </div>
       </div>
+      <div class="progress-circle" id="progress-circle-5">
+        <svg viewBox="0 0 36 36">
+          <circle class="progress-ring" cx="18" cy="18" r="16"></circle>
+          <circle class="progress-fill" cx="18" cy="18" r="16"></circle>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene-7 Video Section -->
+  <section class="scene-7-section" id="scene-7-section">
+    <video class="scene-7-video" id="scene-7-video" playsinline preload="auto">
+      <source src="scene-7.mp4" type="video/mp4">
+    </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Canvas-6 Section -->
+  <section class="canvas-6-section" id="canvas-6-section">
+    <div class="canvas-container">
+      <canvas id="frame-canvas-6"></canvas>
+      <div class="scroll-hint" id="canvas-6-scroll-hint">
+        <div class="inner">
+          <img src="/icons/scroll.svg" alt="">
+          <span class="text">Scroll</span>
+        </div>
+      </div>
       <button class="rewind-button" id="rewind-button" style="display: none;">
          <img src="/icons/rewind.webp" alt="">
       </button>
       <a href="https://alea.school" class="home-link" id="home-link" style="display: none;">
         <img src="/icons/home-logo.webp" alt="">
       </a>
-      <div class="progress-circle" id="progress-circle-5">
+      <div class="progress-circle" id="progress-circle-6">
         <svg viewBox="0 0 36 36">
           <circle class="progress-ring" cx="18" cy="18" r="16"></circle>
           <circle class="progress-fill" cx="18" cy="18" r="16"></circle>
@@ -646,25 +684,29 @@
     }
 
     // Configuration
-    const FRAME_COUNT = 28;
+    const FRAME_COUNT = 27;
     const FRAME_PATH = 'frames/frame_';
     const FRAME_EXT = '.webp';
     
-    const FRAME_COUNT_2 = 593;
+    const FRAME_COUNT_2 = 128;
     const FRAME_PATH_2 = 'frames-2/frame_';
     const FRAME_EXT_2 = '.webp';
     
-    const FRAME_COUNT_3 = 32;
+    const FRAME_COUNT_3 = 164;
     const FRAME_PATH_3 = 'frames-3/frame_';
     const FRAME_EXT_3 = '.webp';
     
-    const FRAME_COUNT_4 = 47;
+    const FRAME_COUNT_4 = 40;
     const FRAME_PATH_4 = 'frames-4/frame_';
     const FRAME_EXT_4 = '.webp';
     
-    const FRAME_COUNT_5 = 70;
+    const FRAME_COUNT_5 = 56;
     const FRAME_PATH_5 = 'frames-5/frame_';
     const FRAME_EXT_5 = '.webp';
+
+    const FRAME_COUNT_6 = 30;
+    const FRAME_PATH_6 = 'frames-6/frame_';
+    const FRAME_EXT_6 = '.webp';
 
     // Elements
     const canvas = document.getElementById('frame-canvas');
@@ -690,6 +732,8 @@
     const scene5Video = document.getElementById('scene-5-video');
     const scene6Section = document.getElementById('scene-6-section');
     const scene6Video = document.getElementById('scene-6-video');
+    const scene7Section = document.getElementById('scene-7-section');
+    const scene7Video = document.getElementById('scene-7-video');
     const canvas3 = document.getElementById('frame-canvas-3');
     const ctx3 = canvas3.getContext('2d');
     const canvas3Section = document.getElementById('canvas-3-section');
@@ -700,6 +744,10 @@
     const ctx5 = canvas5.getContext('2d');
     const canvas5Section = document.getElementById('canvas-5-section');
     const canvas5ScrollHint = document.getElementById('canvas-5-scroll-hint');
+    const canvas6 = document.getElementById('frame-canvas-6');
+    const ctx6 = canvas6.getContext('2d');
+    const canvas6Section = document.getElementById('canvas-6-section');
+    const canvas6ScrollHint = document.getElementById('canvas-6-scroll-hint');
     const rewindButton = document.getElementById('rewind-button');
     const homeLink = document.getElementById('home-link');
     const progressCircle1 = document.getElementById('progress-circle-1');
@@ -707,6 +755,7 @@
     const progressCircle3 = document.getElementById('progress-circle-3');
     const progressCircle4 = document.getElementById('progress-circle-4');
     const progressCircle5 = document.getElementById('progress-circle-5');
+    const progressCircle6 = document.getElementById('progress-circle-6');
 
     // Frame storage
     const frames = [];
@@ -734,12 +783,18 @@
     let targetFrame5 = 0;
     let imagesLoaded5 = 0;
     
+    const frames6 = [];
+    let currentFrame6 = 0;
+    let targetFrame6 = 0;
+    let imagesLoaded6 = 0;
+    
     let lenis = null;
     let scene1Played = false;
     let scene2Played = false;
     let scene4Played = false;
     let scene5Played = false;
     let scene6Played = false;
+    let scene7Played = false;
     let lastScrollPosition = 0;
     let maxScrollReached = 0;
     let isCorrectingScroll = false;
@@ -907,6 +962,33 @@
       });
     }
 
+    // Preload all frames for canvas-6
+    function preloadFrames6() {
+      return new Promise((resolve) => {
+        for (let i = 1; i <= FRAME_COUNT_6; i++) {
+          const img = new Image();
+          const frameNum = String(i).padStart(4, '0');
+          img.src = `${FRAME_PATH_6}${frameNum}${FRAME_EXT_6}`;
+          
+          img.onload = () => {
+            imagesLoaded6++;
+            if (imagesLoaded6 === FRAME_COUNT_6) {
+              resolve();
+            }
+          };
+          
+          img.onerror = () => {
+            imagesLoaded6++;
+            if (imagesLoaded6 === FRAME_COUNT_6) {
+              resolve();
+            }
+          };
+          
+          frames6[i - 1] = img;
+        }
+      });
+    }
+
     // Preload initial scene videos (scene-1, scene-2, scene-3)
     function preloadInitialVideos() {
       return new Promise((resolve) => {
@@ -945,11 +1027,11 @@
       });
     }
 
-    // Preload remaining scene videos in background (scene-4, scene-5, scene-6)
+    // Preload remaining scene videos in background (scene-4, scene-5, scene-6, scene-7)
     function preloadRemainingVideos() {
       return new Promise((resolve) => {
         let videosLoaded = 0;
-        const totalVideos = 3;
+        const totalVideos = 4;
         
         function checkComplete() {
           videosLoaded++;
@@ -961,7 +1043,8 @@
         const videos = [
           { video: scene4Video, name: 'Scene-4' },
           { video: scene5Video, name: 'Scene-5' },
-          { video: scene6Video, name: 'Scene-6' }
+          { video: scene6Video, name: 'Scene-6' },
+          { video: scene7Video, name: 'Scene-7' }
         ];
         
         videos.forEach(({ video, name }) => {
@@ -1029,6 +1112,16 @@
       }
     }
 
+    // Set canvas-6 size based on first frame
+    function setupCanvas6() {
+      const firstFrame = frames6[0];
+      if (firstFrame && firstFrame.naturalWidth) {
+        canvas6.width = firstFrame.naturalWidth;
+        canvas6.height = firstFrame.naturalHeight;
+        drawFrame6(0);
+      }
+    }
+
     // Draw a specific frame
     function drawFrame(index) {
       const frame = frames[index];
@@ -1076,6 +1169,16 @@
         ctx5.clearRect(0, 0, canvas5.width, canvas5.height);
         ctx5.drawImage(frame, 0, 0);
         currentFrame5 = index;
+      }
+    }
+
+    // Draw a specific frame for canvas-6
+    function drawFrame6(index) {
+      const frame = frames6[index];
+      if (frame && frame.complete) {
+        ctx6.clearRect(0, 0, canvas6.width, canvas6.height);
+        ctx6.drawImage(frame, 0, 0);
+        currentFrame6 = index;
       }
     }
 
@@ -1137,6 +1240,18 @@
         }
       }
       requestAnimationFrame(animate5);
+    }
+
+    // Smooth frame interpolation for canvas-6
+    function animate6() {
+      const diff = targetFrame6 - currentFrame6;
+      if (Math.abs(diff) > 0.5) {
+        const nextFrame = Math.round(currentFrame6 + diff * 0.15);
+        if (nextFrame !== currentFrame6 && nextFrame >= 0 && nextFrame < FRAME_COUNT_6) {
+          drawFrame6(nextFrame);
+        }
+      }
+      requestAnimationFrame(animate6);
     }
 
     // Initialize Lenis
@@ -1269,10 +1384,32 @@
           // Update progress indicator
           updateCanvasProgress(5, sectionProgress5);
           
+          // Trigger scene-7 when we reach the last frame of canvas-5
+          const isScrollingDown = scroll > lastScrollPosition;
+          if (targetFrame5 >= FRAME_COUNT_5 - 1 && !scene7Played && isScrollingDown) {
+            setTimeout(() => {
+              playScene7();
+            }, 100);
+          }
+        }
+
+        // Handle canvas-6 scrolling
+        if (canvas6Section.offsetParent !== null) {
+          const sectionTop6 = canvas6Section.offsetTop;
+          const sectionHeight6 = canvas6Section.offsetHeight - window.innerHeight;
+          
+          const scrollInSection6 = scroll - sectionTop6;
+          const sectionProgress6 = Math.max(0, Math.min(1, scrollInSection6 / sectionHeight6));
+          
+          targetFrame6 = Math.floor(sectionProgress6 * (FRAME_COUNT_6 - 1));
+          
+          // Update progress indicator
+          updateCanvasProgress(6, sectionProgress6);
+          
           // Show rewind button and hide scroll hint at 60% progress
-          if (sectionProgress5 >= 0.6) {
-            if (canvas5ScrollHint) {
-              canvas5ScrollHint.style.display = 'none';
+          if (sectionProgress6 >= 0.9) {
+            if (canvas6ScrollHint) {
+              canvas6ScrollHint.style.display = 'none';
             }
             if (rewindButton) {
               rewindButton.style.display = 'block';
@@ -1281,8 +1418,8 @@
               homeLink.style.display = 'block';
             }
           } else {
-            if (canvas5ScrollHint) {
-              canvas5ScrollHint.style.display = 'block';
+            if (canvas6ScrollHint) {
+              canvas6ScrollHint.style.display = 'block';
             }
             if (rewindButton) {
               rewindButton.style.display = 'none';
@@ -1318,7 +1455,7 @@
       scene1Video.play();
       
       // iOS FIX: Warm up all videos during user interaction context
-      const videosToWarm = [scene2Video, scene3Video, scene4Video, scene5Video, scene6Video];
+      const videosToWarm = [scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video];
       videosToWarm.forEach((video, index) => {
         video.muted = true;
         video.play().then(() => {
@@ -1533,13 +1670,56 @@
         
         // Show canvas-5 section
         canvas5Section.style.display = 'block';
-        
-        // Reset canvas-5 UI elements
-        resetCanvas5UI();
+      
         
         // Scroll to canvas-5 section instantly
         window.scrollTo(0, canvas5Section.offsetTop);
         maxScrollReached = canvas5Section.offsetTop;
+        updateActiveMenuButton(6);
+      }, { once: true });
+    }
+
+    // Play scene-7 video
+    function playScene7() {
+      if (scene7Played) return;
+      scene7Played = true;
+      
+      // Disable scrolling during scene-7
+      document.body.classList.add('no-scroll');
+      
+      // Hide canvas-5 section immediately
+      canvas5Section.style.display = 'none';
+      
+      // Show and scroll to scene-7 section
+      scene7Section.style.display = 'flex';
+      window.scrollTo(0, scene7Section.offsetTop);
+      
+      // Update active menu button
+      updateActiveMenuButton(6);
+      
+      // Play scene-7 video
+      scene7Video.play();
+      
+      // When scene-7 ends, enable scrolling and show canvas-6
+      scene7Video.addEventListener('ended', () => {
+        // Enable scrolling immediately
+        document.body.classList.remove('no-scroll');
+        
+        // Hide scene-7 section instantly
+        scene7Section.style.display = 'none';
+        
+        // Make sure we're showing the first frame of canvas-6
+        drawFrame6(0);
+        
+        // Show canvas-6 section
+        canvas6Section.style.display = 'block';
+        
+        // Reset canvas-6 UI elements
+        resetCanvas6UI();
+        
+        // Scroll to canvas-6 section instantly
+        window.scrollTo(0, canvas6Section.offsetTop);
+        maxScrollReached = canvas6Section.offsetTop;
         updateActiveMenuButton(6);
       }, { once: true });
     }
@@ -1555,19 +1735,32 @@
 
     // Setup video pause and play functionality
     function setupVideoPausePlay() {
-      const videoScenes = [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video];
+      const videoScenes = [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video];
 
       videoScenes.forEach(video => {
+        // Sync paused class with video state
+        video.addEventListener("play", () => {
+          video.parentElement.classList.remove("paused");
+        });
+        
+        video.addEventListener("pause", () => {
+          video.parentElement.classList.add("paused");
+        });
+        
+        // Handle click to toggle play/pause
         video.addEventListener("click", () => {
-          video.parentElement.classList.toggle("paused");
-          video.paused ? video.play() : video.pause();
-        })
-      })
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        });
+      });
     }
 
     // Update canvas progress indicator
     function updateCanvasProgress(canvasIndex, progress) {
-      const progressCircles = [progressCircle1, progressCircle2, progressCircle3, progressCircle4, progressCircle5];
+      const progressCircles = [progressCircle1, progressCircle2, progressCircle3, progressCircle4, progressCircle5, progressCircle6];
       const circle = progressCircles[canvasIndex - 1];
       if (!circle) return;
       
@@ -1579,10 +1772,11 @@
       }
     }
 
-    // Reset canvas-5 UI elements
-    function resetCanvas5UI() {
-      if (canvas5ScrollHint) {
-        canvas5ScrollHint.style.display = 'block';
+
+    // Reset canvas-6 UI elements
+    function resetCanvas6UI() {
+      if (canvas6ScrollHint) {
+        canvas6ScrollHint.style.display = 'block';
       }
       if (rewindButton) {
         rewindButton.style.display = 'none';
@@ -1634,14 +1828,25 @@
       scene4Section.style.display = 'none';
       scene5Section.style.display = 'none';
       scene6Section.style.display = 'none';
+      scene7Section.style.display = 'none';
       canvas1Section.style.display = 'none';
       canvas2Section.style.display = 'none';
       canvas3Section.style.display = 'none';
       canvas4Section.style.display = 'none';
       canvas5Section.style.display = 'none';
+      canvas6Section.style.display = 'none';
       
-      // Reset canvas-5 UI elements when switching scenes
-      resetCanvas5UI();
+      // Reset canvas-6 UI elements when switching scenes
+      resetCanvas6UI();
+      
+      // Remove paused class from all sections
+      scene1Section.classList.remove('paused');
+      scene2Section.classList.remove('paused');
+      scene3Section.classList.remove('paused');
+      scene4Section.classList.remove('paused');
+      scene5Section.classList.remove('paused');
+      scene6Section.classList.remove('paused');
+      scene7Section.classList.remove('paused');
       
       // Stop all videos
       scene1Video.pause();
@@ -1650,6 +1855,7 @@
       scene4Video.pause();
       scene5Video.pause();
       scene6Video.pause();
+      scene7Video.pause();
       
       // Reset video times
       scene1Video.currentTime = 0;
@@ -1658,9 +1864,10 @@
       scene4Video.currentTime = 0;
       scene5Video.currentTime = 0;
       scene6Video.currentTime = 0;
+      scene7Video.currentTime = 0;
       
       // Reset all progress circles
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 6; i++) {
         updateCanvasProgress(i, 0);
       }
       
@@ -1675,6 +1882,8 @@
       targetFrame4 = 0;
       currentFrame5 = 0;
       targetFrame5 = 0;
+      currentFrame6 = 0;
+      targetFrame6 = 0;
       
       // Reset scene played flags so next videos can trigger after canvas
       scene1Played = false;
@@ -1682,6 +1891,7 @@
       scene4Played = false;
       scene5Played = false;
       scene6Played = false;
+      scene7Played = false;
       
       // Ensure Lenis is initialized
       if (!lenis) {
@@ -1869,8 +2079,6 @@
             currentFrame5 = 0;
             drawFrame5(0);
             
-            // Reset canvas-5 UI elements
-            resetCanvas5UI();
             
             if (lenis) {
               lenis.scrollTo(canvas5Section.offsetTop, { immediate: true });
@@ -1879,6 +2087,38 @@
             }
             maxScrollReached = canvas5Section.offsetTop;
             updateActiveMenuButton(6);
+          }, { once: true });
+          break;
+        case 7:
+          scene7Section.style.display = 'flex';
+          if (lenis) {
+            lenis.scrollTo(scene7Section.offsetTop, { immediate: true });
+          } else {
+            window.scrollTo(0, scene7Section.offsetTop);
+          }
+          maxScrollReached = scene7Section.offsetTop;
+          scene7Video.play();
+          updateActiveMenuButton(7);
+          
+          // Setup transition to canvas-6
+          scene7Video.addEventListener('ended', () => {
+            document.body.classList.remove('no-scroll');
+            scene7Section.style.display = 'none';
+            canvas6Section.style.display = 'block';
+            targetFrame6 = 0;
+            currentFrame6 = 0;
+            drawFrame6(0);
+            
+            // Reset canvas-6 UI elements
+            resetCanvas6UI();
+            
+            if (lenis) {
+              lenis.scrollTo(canvas6Section.offsetTop, { immediate: true });
+            } else {
+              window.scrollTo(0, canvas6Section.offsetTop);
+            }
+            maxScrollReached = canvas6Section.offsetTop;
+            updateActiveMenuButton(7);
           }, { once: true });
           break;
       }
@@ -1918,13 +2158,15 @@
         preloadRemainingVideos(),
         preloadFrames3(),
         preloadFrames4(),
-        preloadFrames5()
+        preloadFrames5(),
+        preloadFrames6()
       ]);
       
       // Setup canvases for remaining frames once loaded
       setupCanvas3();
       setupCanvas4();
       setupCanvas5();
+      setupCanvas6();
       
       console.log('Background loading complete');
     }
@@ -1959,6 +2201,9 @@
       scene5Video.currentTime = 0;
       scene6Section.style.display = 'none';
       scene6Video.currentTime = 0;
+      scene7Section.style.display = 'none';
+      scene7Video.currentTime = 0;
+      canvas6Section.style.display = 'none';
       
       // Preload initial videos (scene-1, scene-2, scene-3) and frames (frames and frames-2 directories)
       await preloadInitialVideos();
@@ -1977,8 +2222,8 @@
       setupMenuNavigation();
       setupRewindButton();
       
-      // Reset canvas-5 UI elements
-      resetCanvas5UI();
+      // Reset canvas-6 UI elements
+      resetCanvas6UI();
 
       // Setup video pause and play functionality
       setupVideoPausePlay();
@@ -1992,6 +2237,7 @@
       animate3();
       animate4();
       animate5();
+      animate6();
       
       // Start loading remaining resources in background
       loadRemainingResources();

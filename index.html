@@ -253,6 +253,43 @@
       overflow: hidden;
     }
 
+    /* Pause overlay */
+    .scene-1-section,
+    .scene-2-section,
+    .scene-3-section,
+    .scene-4-section,
+    .scene-5-section,
+    .scene-6-section {
+      .pause-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        opacity: 0;
+
+        .pause-button {
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img, svg {
+            display: block;
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: contain;
+          }
+        }
+      }
+      &.paused {
+        .pause-overlay {
+          opacity: 1;
+        }
+      }
+    }
+
 
     /* Menu */
     .menu-wrap {
@@ -418,7 +455,12 @@
     <video class="scene-1-video" id="scene-1-video" playsinline preload="auto">
       <source src="scene-1.mp4" type="video/mp4">
     </video>
-    
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+     </div>
+    </div>
     <!-- Tap to play overlay -->
     <div class="tap-overlay" id="tap-overlay">
       <div class="play-button">
@@ -452,6 +494,12 @@
     <video class="scene-2-video" id="scene-2-video" playsinline preload="auto">
       <source src="scene-2.mp4" type="video/mp4">
     </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
   </section>
 
   <!-- Scene-3 Video Section -->
@@ -459,6 +507,12 @@
     <video class="scene-3-video" id="scene-3-video" playsinline preload="auto">
       <source src="scene-3.mp4" type="video/mp4">
     </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
   </section>
 
   <!-- Canvas-2 Section -->
@@ -485,6 +539,12 @@
     <video class="scene-4-video" id="scene-4-video" playsinline preload="auto">
       <source src="scene-4.mp4" type="video/mp4">
     </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
   </section>
 
   <!-- Canvas-3 Section -->
@@ -511,6 +571,12 @@
     <video class="scene-5-video" id="scene-5-video" playsinline preload="auto">
       <source src="scene-5.mp4" type="video/mp4">
     </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
   </section>
 
   <!-- Canvas-4 Section -->
@@ -537,6 +603,12 @@
     <video class="scene-6-video" id="scene-6-video" playsinline preload="auto">
       <source src="scene-6.mp4" type="video/mp4">
     </video>
+    <!-- pause overlay -->
+    <div class="pause-overlay">
+      <div class="pause-button">
+        <img src="/icons/pause.svg" alt="">
+      </div>
+    </div>
   </section>
 
   <!-- Canvas-5 Section -->
@@ -1481,6 +1553,18 @@
       // });
     }
 
+    // Setup video pause and play functionality
+    function setupVideoPausePlay() {
+      const videoScenes = [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video];
+
+      videoScenes.forEach(video => {
+        video.addEventListener("click", () => {
+          video.parentElement.classList.toggle("paused");
+          video.paused ? video.play() : video.pause();
+        })
+      })
+    }
+
     // Update canvas progress indicator
     function updateCanvasProgress(canvasIndex, progress) {
       const progressCircles = [progressCircle1, progressCircle2, progressCircle3, progressCircle4, progressCircle5];
@@ -1895,6 +1979,9 @@
       
       // Reset canvas-5 UI elements
       resetCanvas5UI();
+
+      // Setup video pause and play functionality
+      setupVideoPausePlay();
       
       // Hide loader
       loader.classList.add('hidden');

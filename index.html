@@ -661,6 +661,30 @@
     let lastBlurProgress = -1;
     let initialLoadingComplete = false;
 
+    // Audio elements for frame sounds
+    const frameSound1 = new Audio('sfx/whoose.mp3');
+    const frameSound2 = new Audio('sfx/basket-ball-to-arieal.mp3');
+    const frameSound3 = new Audio('sfx/scroll-3.mp3');
+    const frameSound4 = new Audio('sfx/scroll-4.mp3');
+    const frameSound5 = new Audio('sfx/scroll-5.mp3');
+    const frameSound6 = new Audio('sfx/scroll-6.mp3');
+
+    // Frame thresholds for playing sounds
+    const SOUND_FRAME_THRESHOLD_1 = 1;
+    const SOUND_FRAME_THRESHOLD_2 = 1;
+    const SOUND_FRAME_THRESHOLD_3 = 14;
+    const SOUND_FRAME_THRESHOLD_4 = 14;
+    const SOUND_FRAME_THRESHOLD_5 = 14;
+    const SOUND_FRAME_THRESHOLD_6 = 14;
+
+    // Track if sound has been played for each animation
+    let soundPlayedAtFrame = false;
+    let soundPlayedAtFrame_2 = false;
+    let soundPlayedAtFrame_3 = false;
+    let soundPlayedAtFrame_4 = false;
+    let soundPlayedAtFrame_5 = false;
+    let soundPlayedAtFrame_6 = false;
+
     function preloadFrames() {
       return new Promise((resolve) => {
         for (let i = 1; i <= FRAME_COUNT; i++) {
@@ -881,6 +905,13 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(frame, 0, 0);
         currentFrame = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_1 && !soundPlayedAtFrame) {
+          soundPlayedAtFrame = true;
+          frameSound1.currentTime = 0;
+          frameSound1.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -890,6 +921,13 @@
         ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
         ctx2.drawImage(frame, 0, 0);
         currentFrame2 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_2 && !soundPlayedAtFrame_2) {
+          soundPlayedAtFrame_2 = true;
+          frameSound2.currentTime = 0;
+          frameSound2.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -899,6 +937,13 @@
         ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
         ctx3.drawImage(frame, 0, 0);
         currentFrame3 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_3 && !soundPlayedAtFrame_3) {
+          soundPlayedAtFrame_3 = true;
+          frameSound3.currentTime = 0;
+          // frameSound3.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -908,6 +953,13 @@
         ctx4.clearRect(0, 0, canvas4.width, canvas4.height);
         ctx4.drawImage(frame, 0, 0);
         currentFrame4 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_4 && !soundPlayedAtFrame_4) {
+          soundPlayedAtFrame_4 = true;
+          frameSound4.currentTime = 0;
+          // frameSound4.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -917,6 +969,13 @@
         ctx5.clearRect(0, 0, canvas5.width, canvas5.height);
         ctx5.drawImage(frame, 0, 0);
         currentFrame5 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_5 && !soundPlayedAtFrame_5) {
+          soundPlayedAtFrame_5 = true;
+          frameSound5.currentTime = 0;
+          // frameSound5.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -926,6 +985,13 @@
         ctx6.clearRect(0, 0, canvas6.width, canvas6.height);
         ctx6.drawImage(frame, 0, 0);
         currentFrame6 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_6 && !soundPlayedAtFrame_6) {
+          soundPlayedAtFrame_6 = true;
+          frameSound6.currentTime = 0;
+          // frameSound6.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -1492,6 +1558,14 @@
       scene6Played = false;
       scene7Played = false;
       
+      // Reset sound flags so sounds can play again when navigating from menu
+      soundPlayedAtFrame = false;
+      soundPlayedAtFrame_2 = false;
+      soundPlayedAtFrame_3 = false;
+      soundPlayedAtFrame_4 = false;
+      soundPlayedAtFrame_5 = false;
+      soundPlayedAtFrame_6 = false;
+      
       if (!lenis) initLenis();
       
       document.body.classList.add('no-scroll');
@@ -1672,6 +1746,14 @@
       scene1Played = false;
       scene2Played = false;
       maxScrollReached = 0;
+      
+      // Reset sound flags
+      soundPlayedAtFrame = false;
+      soundPlayedAtFrame_2 = false;
+      soundPlayedAtFrame_3 = false;
+      soundPlayedAtFrame_4 = false;
+      soundPlayedAtFrame_5 = false;
+      soundPlayedAtFrame_6 = false;
       
       canvas1Section.style.display = 'block';
       canvas2Section.style.display = 'none';

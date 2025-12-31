@@ -1203,6 +1203,7 @@
       scene1Played = true;
       
       tapOverlay.classList.add('hidden');
+      scene1Section.classList.remove('paused');
       
       var menuWrap = document.querySelector('.menu-wrap');
       if (menuWrap) menuWrap.style.display = 'flex';
@@ -1239,6 +1240,7 @@
       document.body.classList.add('no-scroll');
       canvas1Section.style.display = 'none';
       scene2Section.style.display = 'flex';
+      scene2Section.classList.remove('paused');
       window.scrollTo(0, scene2Section.offsetTop);
       updateActiveMenuButton(2);
       scene2Video.play();
@@ -1248,6 +1250,7 @@
     function playScene3() {
       scene2Section.style.display = 'none';
       scene3Section.style.display = 'flex';
+      scene3Section.classList.remove('paused');
       window.scrollTo(0, scene3Section.offsetTop);
       updateActiveMenuButton(3);
       scene3Video.play();
@@ -1268,6 +1271,7 @@
       document.body.classList.add('no-scroll');
       canvas2Section.style.display = 'none';
       scene4Section.style.display = 'flex';
+      scene4Section.classList.remove('paused');
       window.scrollTo(0, scene4Section.offsetTop);
       updateActiveMenuButton(4);
       scene4Video.play();
@@ -1288,6 +1292,7 @@
       document.body.classList.add('no-scroll');
       canvas3Section.style.display = 'none';
       scene5Section.style.display = 'flex';
+      scene5Section.classList.remove('paused');
       window.scrollTo(0, scene5Section.offsetTop);
       updateActiveMenuButton(5);
       scene5Video.play();
@@ -1308,6 +1313,7 @@
       document.body.classList.add('no-scroll');
       canvas4Section.style.display = 'none';
       scene6Section.style.display = 'flex';
+      scene6Section.classList.remove('paused');
       window.scrollTo(0, scene6Section.offsetTop);
       updateActiveMenuButton(6);
       scene6Video.play();
@@ -1328,6 +1334,7 @@
       document.body.classList.add('no-scroll');
       canvas5Section.style.display = 'none';
       scene7Section.style.display = 'flex';
+      scene7Section.classList.remove('paused');
       window.scrollTo(0, scene7Section.offsetTop);
       updateActiveMenuButton(6);
       scene7Video.play();
@@ -1471,6 +1478,7 @@
       switch(sceneNum) {
         case 1:
           scene1Section.style.display = 'flex';
+          scene1Section.classList.remove('paused');
           tapOverlay.classList.add('hidden');
           scene1Video.play();
           updateActiveMenuButton(1);
@@ -1490,6 +1498,7 @@
           break;
         case 2:
           scene2Section.style.display = 'flex';
+          scene2Section.classList.remove('paused');
           if (lenis) lenis.scrollTo(scene2Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene2Section.offsetTop);
           maxScrollReached = scene2Section.offsetTop;
@@ -1498,6 +1507,7 @@
           scene2Video.addEventListener('ended', function() {
             scene2Section.style.display = 'none';
             scene3Section.style.display = 'flex';
+            scene3Section.classList.remove('paused');
             if (lenis) lenis.scrollTo(scene3Section.offsetTop, { immediate: true });
             else window.scrollTo(0, scene3Section.offsetTop);
             scene3Video.play();
@@ -1516,6 +1526,7 @@
           break;
         case 3:
           scene3Section.style.display = 'flex';
+          scene3Section.classList.remove('paused');
           if (lenis) lenis.scrollTo(scene3Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene3Section.offsetTop);
           maxScrollReached = scene3Section.offsetTop;
@@ -1534,6 +1545,7 @@
           break;
         case 5:
           scene5Section.style.display = 'flex';
+          scene5Section.classList.remove('paused');
           if (lenis) lenis.scrollTo(scene5Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene5Section.offsetTop);
           maxScrollReached = scene5Section.offsetTop;
@@ -1552,6 +1564,7 @@
           break;
         case 6:
           scene6Section.style.display = 'flex';
+          scene6Section.classList.remove('paused');
           if (lenis) lenis.scrollTo(scene6Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene6Section.offsetTop);
           maxScrollReached = scene6Section.offsetTop;
@@ -1570,6 +1583,7 @@
           break;
         case 7:
           scene7Section.style.display = 'flex';
+          scene7Section.classList.remove('paused');
           if (lenis) lenis.scrollTo(scene7Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene7Section.offsetTop);
           maxScrollReached = scene7Section.offsetTop;

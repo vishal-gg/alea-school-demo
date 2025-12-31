@@ -1513,6 +1513,11 @@
       
       // Play scene-2 video
       scene2Video.play();
+
+      // Helper function to ensure pause overlay is hidden before playing
+      function prepareVideoForPlayback(video) {
+        video.parentElement.classList.remove("paused");
+      }
       
       // When scene-2 ends, play scene-3 instantly
       scene2Video.addEventListener('ended', () => {
@@ -1548,6 +1553,11 @@
         
         // Show canvas-2 section
         canvas2Section.style.display = 'block';
+
+        // Helper function to ensure pause overlay is hidden before playing
+        function prepareVideoForPlayback(video) {
+          video.parentElement.classList.remove("paused");
+        }
         
         // Scroll to canvas-2 section instantly
         window.scrollTo(0, canvas2Section.offsetTop);
@@ -1590,6 +1600,11 @@
         
         // Show canvas-3 section
         canvas3Section.style.display = 'block';
+
+        // Helper function to ensure pause overlay is hidden before playing
+        function prepareVideoForPlayback(video) {
+          video.parentElement.classList.remove("paused");
+        }
         
         // Scroll to canvas-3 section instantly
         window.scrollTo(0, canvas3Section.offsetTop);
@@ -1632,6 +1647,11 @@
         
         // Show canvas-4 section
         canvas4Section.style.display = 'block';
+
+        // Helper function to ensure pause overlay is hidden before playing
+        function prepareVideoForPlayback(video) {
+          video.parentElement.classList.remove("paused");
+        }
         
         // Scroll to canvas-4 section instantly
         window.scrollTo(0, canvas4Section.offsetTop);
@@ -1674,6 +1694,11 @@
         
         // Show canvas-5 section
         canvas5Section.style.display = 'block';
+
+        // Helper function to ensure pause overlay is hidden before playing
+        function prepareVideoForPlayback(video) {
+          video.parentElement.classList.remove("paused");
+        }
       
         
         // Scroll to canvas-5 section instantly
@@ -1720,6 +1745,12 @@
         
         // Reset canvas-6 UI elements
         resetCanvas6UI();
+
+
+        // Helper function to ensure pause overlay is hidden before playing
+        function prepareVideoForPlayback(video) {
+          video.parentElement.classList.remove("paused");
+        }
         
         // Scroll to canvas-6 section instantly
         window.scrollTo(0, canvas6Section.offsetTop);
@@ -1747,8 +1778,17 @@
           video.parentElement.classList.remove("paused");
         });
         
+        video.addEventListener("playing", () => {
+          // Also remove on 'playing' event for extra safety
+          video.parentElement.classList.remove("paused");
+        });
+        
         video.addEventListener("pause", () => {
-          video.parentElement.classList.add("paused");
+          // Only add paused class if video is actually paused by user (not during transitions)
+          // Check if video has actually started (currentTime > 0) and isn't ended
+          if (video.currentTime > 0 && !video.ended) {
+            video.parentElement.classList.add("paused");
+          }
         });
         
         // Handle click to toggle play/pause
@@ -1760,6 +1800,11 @@
           }
         });
       });
+    }
+
+    // Helper function to ensure pause overlay is hidden before playing
+    function prepareVideoForPlayback(video) {
+      video.parentElement.classList.remove("paused");
     }
 
     // Update canvas progress indicator

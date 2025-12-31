@@ -228,6 +228,26 @@
       object-fit: cover;
     }
 
+    .scene-1-video:focus,
+    .scene-2-video:focus,
+    .scene-3-video:focus,
+    .scene-4-video:focus,
+    .scene-5-video:focus,
+    .scene-6-video:focus,
+    .scene-7-video:focus {
+      outline: none;
+    }
+
+    .scene-1-video:active,
+    .scene-2-video:active,
+    .scene-3-video:active,
+    .scene-4-video:active,
+    .scene-5-video:active,
+    .scene-6-video:active,
+    .scene-7-video:active {
+      outline: none;
+    }
+
     body.no-scroll {
       overflow: hidden;
     }
@@ -1368,6 +1388,7 @@
         video.addEventListener('click', function() {
           if (video.paused) video.play();
           else video.pause();
+          video.blur();
         });
       });
     }

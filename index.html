@@ -500,7 +500,7 @@
   </section>
 
   <section class="breathing-scene-section" id="breathing-scene-section">
-    <video class="breathing-scene-video" id="breathing-scene-video" playsinline preload="auto"><source src="breathing-scene.mp4" type="video/mp4"></video>
+    <video class="breathing-scene-video" id="breathing-scene-video" playsinline preload="auto" muted><source src="breathing-scene.mp4" type="video/mp4"></video>
     <div class="pause-overlay"><div class="pause-button"><img src="/icons/pause.svg" alt=""></div></div>
   </section>
 
@@ -711,7 +711,7 @@
     // Audio elements for frame sounds
     const frameSoundWhoose = new Audio('sfx/whoose.mp3');
     const frameSoundSunTransition = new Audio('sfx/basket-ball-to-arieal.mp3');
-    const frameSoundBreath = new Audio('sfx/breath.mp3');
+    const frameSoundBreath = new Audio('sfx/breathing.mp3');
     const frameSoundGrass = new Audio('sfx/grass.mp3');
     const frameSoundOutro = new Audio('sfx/outro.mp3');
     const frameSoundDojoToPot = new Audio('sfx/dojo-to-pot.mp3');
@@ -719,7 +719,7 @@
     // Frame thresholds for playing sounds
     const SOUND_FRAME_THRESHOLD_WHOOSE = 1;
     const SOUND_FRAME_THRESHOLD_SUN_TRANSITION = 1;
-    const SOUND_FRAME_THRESHOLD_BREATH = 20;
+    const SOUND_FRAME_THRESHOLD_BREATH = 1;
     const SOUND_FRAME_THRESHOLD_GRASS = 5;
     const SOUND_FRAME_THRESHOLD_OUTRO = 3;
     const SOUND_FRAME_THRESHOLD_DOJO_TO_POT = 3;
@@ -1509,6 +1509,7 @@
       breathingSceneSection.style.display = 'flex';
       breathingSceneSection.classList.remove('paused');
       window.scrollTo(0, breathingSceneSection.offsetTop);
+      breathingSceneVideo.muted = true;
       breathingSceneVideo.play();
       breathingSceneVideo.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');

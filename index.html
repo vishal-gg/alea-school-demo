@@ -699,8 +699,10 @@
     let warmingUpVideos = new Set();
     let isAutoAnimating = false;
     
-    // Only first and last canvas get auto-complete
+    // Auto-complete flags for canvases that auto-scroll on first interaction
     let canvas1FirstScrollTriggered = false;
+    let canvas3FirstScrollTriggered = false;
+    let yogaToKarateFirstScrollTriggered = false;
     let canvas6FirstScrollTriggered = false;
 
     let lastBlurProgress = -1;
@@ -1071,7 +1073,7 @@
       }
     }
 
-    // Auto-complete animation - only used for canvas 1 and 6
+    // Auto-complete animation - used for canvas 1, 3, yoga-to-karate, and 6
     function animateCanvasToEnd(canvasIndex, frameCount, drawFunction, onComplete) {
       const duration = frameCount * 25;
       const startTime = performance.now();
@@ -1100,6 +1102,12 @@
           if (canvasIndex === 1) {
             currentFrame = frameCount - 1;
             targetFrame = frameCount - 1;
+          } else if (canvasIndex === 3) {
+            currentFrame3 = frameCount - 1;
+            targetFrame3 = frameCount - 1;
+          } else if (canvasIndex === 'yoga') {
+            currentYogaToKarateFrame = frameCount - 1;
+            targetYogaToKarateFrame = frameCount - 1;
           } else if (canvasIndex === 6) {
             currentFrame6 = frameCount - 1;
             targetFrame6 = frameCount - 1;
@@ -1141,12 +1149,14 @@
     }
 
     function animate3() {
-      const diff = targetFrame3 - currentFrame3;
-      if (Math.abs(diff) > 0.01) {
-        const step = diff * 0.25;
-        const nextFrame = Math.abs(step) < 1 ? currentFrame3 + Math.sign(diff) : Math.round(currentFrame3 + step);
-        if (nextFrame !== currentFrame3 && nextFrame >= 0 && nextFrame < FRAME_COUNT_3) {
-          drawFrame3(nextFrame);
+      if (!isAutoAnimating) {
+        const diff = targetFrame3 - currentFrame3;
+        if (Math.abs(diff) > 0.01) {
+          const step = diff * 0.25;
+          const nextFrame = Math.abs(step) < 1 ? currentFrame3 + Math.sign(diff) : Math.round(currentFrame3 + step);
+          if (nextFrame !== currentFrame3 && nextFrame >= 0 && nextFrame < FRAME_COUNT_3) {
+            drawFrame3(nextFrame);
+          }
         }
       }
       requestAnimationFrame(animate3);
@@ -1191,12 +1201,14 @@
     }
 
     function animateYogaToKarate() {
-      const diff = targetYogaToKarateFrame - currentYogaToKarateFrame;
-      if (Math.abs(diff) > 0.01) {
-        const step = diff * 0.25;
-        const nextFrame = Math.abs(step) < 1 ? currentYogaToKarateFrame + Math.sign(diff) : Math.round(currentYogaToKarateFrame + step);
-        if (nextFrame !== currentYogaToKarateFrame && nextFrame >= 0 && nextFrame < YOGA_TO_KARATE_FRAME_COUNT) {
-          drawYogaToKarateFrame(nextFrame);
+      if (!isAutoAnimating) {
+        const diff = targetYogaToKarateFrame - currentYogaToKarateFrame;
+        if (Math.abs(diff) > 0.01) {
+          const step = diff * 0.25;
+          const nextFrame = Math.abs(step) < 1 ? currentYogaToKarateFrame + Math.sign(diff) : Math.round(currentYogaToKarateFrame + step);
+          if (nextFrame !== currentYogaToKarateFrame && nextFrame >= 0 && nextFrame < YOGA_TO_KARATE_FRAME_COUNT) {
+            drawYogaToKarateFrame(nextFrame);
+          }
         }
       }
       requestAnimationFrame(animateYogaToKarate);
@@ -1275,12 +1287,18 @@
           }
         }
 
-        // CANVAS-3: Normal scroll behavior - trigger at 98% progress
+        // CANVAS-3: Auto-complete on first scroll
         if (canvas3Section.offsetParent !== null) {
           var sectionTop3 = canvas3Section.offsetTop;
           var sectionHeight3 = canvas3Section.offsetHeight - window.innerHeight;
           var scrollInSection3 = scroll - sectionTop3;
           var sectionProgress3 = Math.max(0, Math.min(1, scrollInSection3 / sectionHeight3));
+          
+          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01) {
+            canvas3FirstScrollTriggered = true;
+            animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); });
+            return;
+          }
           
           targetFrame3 = Math.floor(sectionProgress3 * (FRAME_COUNT_3 - 1));
           if (targetFrame3 !== currentFrame3 && targetFrame3 >= 0 && targetFrame3 < FRAME_COUNT_3) {
@@ -1288,18 +1306,23 @@
           }
           updateCanvasProgress(3, sectionProgress3);
           
-          // trigger breathing scene at 98% Progress
           if (sectionProgress3 >= 0.98 && !breathingScenePlayed) {
             playBreathingScene();
           }
         }
 
-        // YOGA-TO-KARATE CANVAS: Normal scroll behavior - trigger at 98% progress
+        // YOGA-TO-KARATE CANVAS: Auto-complete on first scroll
         if (yogaToKarateSection.offsetParent !== null) {
           var sectionTopYoga = yogaToKarateSection.offsetTop;
           var sectionHeightYoga = yogaToKarateSection.offsetHeight - window.innerHeight;
           var scrollInSectionYoga = scroll - sectionTopYoga;
           var sectionProgressYoga = Math.max(0, Math.min(1, scrollInSectionYoga / sectionHeightYoga));
+          
+          if (!yogaToKarateFirstScrollTriggered && sectionProgressYoga > 0.01) {
+            yogaToKarateFirstScrollTriggered = true;
+            animateCanvasToEnd('yoga', YOGA_TO_KARATE_FRAME_COUNT, drawYogaToKarateFrame, function() { playScene5(); });
+            return;
+          }
           
           targetYogaToKarateFrame = Math.floor(sectionProgressYoga * (YOGA_TO_KARATE_FRAME_COUNT - 1));
           if (targetYogaToKarateFrame !== currentYogaToKarateFrame && targetYogaToKarateFrame >= 0 && targetYogaToKarateFrame < YOGA_TO_KARATE_FRAME_COUNT) {
@@ -1307,7 +1330,6 @@
           }
           updateCanvasProgress('yoga', sectionProgressYoga);
           
-          // trigger next scene at 98% Progress
           if (sectionProgressYoga >= 0.98 && !scene5Played) {
             playScene5();
           }
@@ -1640,6 +1662,8 @@
       isAutoAnimating = false;
       
       canvas1FirstScrollTriggered = false;
+      canvas3FirstScrollTriggered = false;
+      yogaToKarateFirstScrollTriggered = false;
       canvas6FirstScrollTriggered = false;
       
       scene1Section.style.display = 'none';

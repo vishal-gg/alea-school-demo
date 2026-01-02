@@ -149,6 +149,10 @@
       height: 150vh;
     }
 
+    .canvas-3-section {
+      height: 140vh;
+    }
+
     .canvas-container {
       position: sticky;
       top: 0;
@@ -664,26 +668,23 @@
     // Audio elements for frame sounds
     const frameSound1 = new Audio('sfx/whoose.mp3');
     const frameSound2 = new Audio('sfx/basket-ball-to-arieal.mp3');
-    const frameSound3 = new Audio('sfx/scroll-3.mp3');
-    const frameSound4 = new Audio('sfx/scroll-4.mp3');
-    const frameSound5 = new Audio('sfx/scroll-5.mp3');
-    const frameSound6 = new Audio('sfx/scroll-6.mp3');
+    const frameSoundBreath = new Audio('sfx/breath.mp3');
+    const frameSoundGrass = new Audio('sfx/grass.mp3');
+    const frameSoundOutro = new Audio('sfx/outro.mp3');
 
     // Frame thresholds for playing sounds
     const SOUND_FRAME_THRESHOLD_1 = 1;
     const SOUND_FRAME_THRESHOLD_2 = 1;
-    const SOUND_FRAME_THRESHOLD_3 = 14;
-    const SOUND_FRAME_THRESHOLD_4 = 14;
-    const SOUND_FRAME_THRESHOLD_5 = 14;
-    const SOUND_FRAME_THRESHOLD_6 = 14;
+    const SOUND_FRAME_THRESHOLD_BREATH = 20;
+    const SOUND_FRAME_THRESHOLD_GRASS = 5;
+    const SOUND_FRAME_THRESHOLD_OUTRO = 3;
 
     // Track if sound has been played for each animation
     let soundPlayedAtFrame = false;
     let soundPlayedAtFrame_2 = false;
-    let soundPlayedAtFrame_3 = false;
-    let soundPlayedAtFrame_4 = false;
-    let soundPlayedAtFrame_5 = false;
-    let soundPlayedAtFrame_6 = false;
+    let soundPlayedAtFrameBreath = false;
+    let soundPlayedAtFrameGrass = false;
+    let soundPlayedAtFrameOutro = false;
 
     function preloadFrames() {
       return new Promise((resolve) => {
@@ -939,10 +940,10 @@
         currentFrame3 = index;
         
         // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_3 && !soundPlayedAtFrame_3) {
-          soundPlayedAtFrame_3 = true;
-          frameSound3.currentTime = 0;
-          // frameSound3.play().catch(err => console.log('Audio play failed:', err));
+        if (index >= SOUND_FRAME_THRESHOLD_BREATH && !soundPlayedAtFrameBreath) {
+          soundPlayedAtFrameBreath = true;
+          frameSoundBreath.currentTime = 0;
+          frameSoundBreath.play().catch(err => console.log('Audio play failed:', err));
         }
       }
     }
@@ -953,13 +954,6 @@
         ctx4.clearRect(0, 0, canvas4.width, canvas4.height);
         ctx4.drawImage(frame, 0, 0);
         currentFrame4 = index;
-        
-        // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_4 && !soundPlayedAtFrame_4) {
-          soundPlayedAtFrame_4 = true;
-          frameSound4.currentTime = 0;
-          // frameSound4.play().catch(err => console.log('Audio play failed:', err));
-        }
       }
     }
 
@@ -971,10 +965,10 @@
         currentFrame5 = index;
         
         // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_5 && !soundPlayedAtFrame_5) {
-          soundPlayedAtFrame_5 = true;
-          frameSound5.currentTime = 0;
-          // frameSound5.play().catch(err => console.log('Audio play failed:', err));
+        if (index >= SOUND_FRAME_THRESHOLD_GRASS && !soundPlayedAtFrameGrass) {
+          soundPlayedAtFrameGrass = true;
+          frameSoundGrass.currentTime = 0;
+          frameSoundGrass.play().catch(err => console.log('Audio play failed:', err));
         }
       }
     }
@@ -987,10 +981,10 @@
         currentFrame6 = index;
         
         // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_6 && !soundPlayedAtFrame_6) {
-          soundPlayedAtFrame_6 = true;
-          frameSound6.currentTime = 0;
-          // frameSound6.play().catch(err => console.log('Audio play failed:', err));
+        if (index >= SOUND_FRAME_THRESHOLD_OUTRO && !soundPlayedAtFrameOutro) {
+          soundPlayedAtFrameOutro = true;
+          frameSoundOutro.currentTime = 0;
+          frameSoundOutro.play().catch(err => console.log('Audio play failed:', err));
         }
       }
     }
@@ -1561,10 +1555,9 @@
       // Reset sound flags so sounds can play again when navigating from menu
       soundPlayedAtFrame = false;
       soundPlayedAtFrame_2 = false;
-      soundPlayedAtFrame_3 = false;
-      soundPlayedAtFrame_4 = false;
-      soundPlayedAtFrame_5 = false;
-      soundPlayedAtFrame_6 = false;
+      soundPlayedAtFrameBreath = false;
+      soundPlayedAtFrameGrass = false;
+      soundPlayedAtFrameOutro = false;
       
       if (!lenis) initLenis();
       

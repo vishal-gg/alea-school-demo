@@ -139,7 +139,8 @@
     .canvas-3-section,
     .canvas-4-section,
     .canvas-5-section,
-    .canvas-6-section {
+    .canvas-6-section,
+    .yoga-to-karate-canvas-section {
       position: relative;
       height: 130vh;
     }
@@ -172,7 +173,8 @@
     #frame-canvas-3,
     #frame-canvas-4,
     #frame-canvas-5,
-    #frame-canvas-6 {
+    #frame-canvas-6,
+    #frame-yoga-to-karate-canvas {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -215,7 +217,8 @@
     .scene-4-section,
     .scene-5-section,
     .scene-6-section,
-    .scene-7-section {
+    .scene-7-section,
+    .breathing-scene-section {
       position: relative;
       height: 100vh;
       display: none;
@@ -229,7 +232,8 @@
     .scene-4-video,
     .scene-5-video,
     .scene-6-video,
-    .scene-7-video {
+    .scene-7-video,
+    .breathing-scene-video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -241,7 +245,8 @@
     .scene-4-video:focus,
     .scene-5-video:focus,
     .scene-6-video:focus,
-    .scene-7-video:focus {
+    .scene-7-video:focus,
+    .breathing-scene-video:focus {
       outline: none;
     }
 
@@ -251,7 +256,8 @@
     .scene-4-video:active,
     .scene-5-video:active,
     .scene-6-video:active,
-    .scene-7-video:active {
+    .scene-7-video:active,
+    .breathing-scene-video:active {
       outline: none;
     }
 
@@ -290,7 +296,8 @@
     .scene-4-section.paused .pause-overlay,
     .scene-5-section.paused .pause-overlay,
     .scene-6-section.paused .pause-overlay,
-    .scene-7-section.paused .pause-overlay {
+    .scene-7-section.paused .pause-overlay,
+    .breathing-scene-section.paused .pause-overlay {
       opacity: 1;
     }
 
@@ -478,7 +485,7 @@
   </section>
 
   <section class="scene-4-section" id="scene-4-section">
-    <video class="scene-4-video" id="scene-4-video" playsinline preload="auto"><source src="scene-4.mp4" type="video/mp4"></video>
+    <video class="scene-4-video filler-scene" id="scene-4-video" playsinline preload="auto"><source src="scene-4.mp4" type="video/mp4"></video>
     <div class="pause-overlay"><div class="pause-button"><img src="/icons/pause.svg" alt=""></div></div>
   </section>
 
@@ -487,6 +494,21 @@
       <canvas id="frame-canvas-3"></canvas>
       <div class="scroll-hint"><div class="inner"><img src="/icons/scroll.svg" alt=""><span class="text">Scroll</span></div></div>
       <div class="progress-circle" id="progress-circle-3">
+        <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="breathing-scene-section" id="breathing-scene-section">
+    <video class="breathing-scene-video" id="breathing-scene-video" playsinline preload="auto"><source src="breathing-scene.mp4" type="video/mp4"></video>
+    <div class="pause-overlay"><div class="pause-button"><img src="/icons/pause.svg" alt=""></div></div>
+  </section>
+
+  <section class="yoga-to-karate-canvas-section" id="yoga-to-karate-canvas-section">
+    <div class="canvas-container">
+      <canvas id="frame-yoga-to-karate-canvas"></canvas>
+      <div class="scroll-hint"><div class="inner"><img src="/icons/scroll.svg" alt=""><span class="text">Scroll</span></div></div>
+      <div class="progress-circle" id="progress-circle-yoga">
         <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
       </div>
     </div>
@@ -554,7 +576,7 @@
     const FRAME_PATH_2 = 'frames-2/frame_';
     const FRAME_EXT_2 = '.webp';
     
-    const FRAME_COUNT_3 = 164;
+    const FRAME_COUNT_3 = 35;
     const FRAME_PATH_3 = 'frames-3/frame_';
     const FRAME_EXT_3 = '.webp';
     
@@ -569,6 +591,10 @@
     const FRAME_COUNT_6 = 30;
     const FRAME_PATH_6 = 'frames-6/frame_';
     const FRAME_EXT_6 = '.webp';
+
+    const YOGA_TO_KARATE_FRAME_COUNT = 49;
+    const YOGA_TO_KARATE_FRAME_PATH = 'yoga-to-karate-frames/frame_';
+    const YOGA_TO_KARATE_FRAME_EXT = '.webp';
 
     const canvas = document.getElementById('frame-canvas');
     const ctx = canvas.getContext('2d');
@@ -608,6 +634,11 @@
     const ctx6 = canvas6.getContext('2d');
     const canvas6Section = document.getElementById('canvas-6-section');
     const canvas6ScrollHint = document.getElementById('canvas-6-scroll-hint');
+    const yogaToKarateCanvas = document.getElementById('frame-yoga-to-karate-canvas');
+    const ctxYogaToKarate = yogaToKarateCanvas.getContext('2d');
+    const yogaToKarateSection = document.getElementById('yoga-to-karate-canvas-section');
+    const breathingSceneSection = document.getElementById('breathing-scene-section');
+    const breathingSceneVideo = document.getElementById('breathing-scene-video');
     const rewindButton = document.getElementById('rewind-button');
     const homeLink = document.getElementById('home-link');
     const progressCircle1 = document.getElementById('progress-circle-1');
@@ -616,6 +647,7 @@
     const progressCircle4 = document.getElementById('progress-circle-4');
     const progressCircle5 = document.getElementById('progress-circle-5');
     const progressCircle6 = document.getElementById('progress-circle-6');
+    const progressCircleYoga = document.getElementById('progress-circle-yoga');
 
     const frames = [];
     let currentFrame = 0;
@@ -647,6 +679,11 @@
     let targetFrame6 = 0;
     let imagesLoaded6 = 0;
     
+    const yogaToKarateFrames = [];
+    let currentYogaToKarateFrame = 0;
+    let targetYogaToKarateFrame = 0;
+    let imagesLoadedYogaToKarate = 0;
+    
     let lenis = null;
     let scene1Played = false;
     let scene2Played = false;
@@ -654,6 +691,7 @@
     let scene5Played = false;
     let scene6Played = false;
     let scene7Played = false;
+    let breathingScenePlayed = false;
     let lastScrollPosition = 0;
     let maxScrollReached = 0;
     let isCorrectingScroll = false;
@@ -801,6 +839,19 @@
       });
     }
 
+    function preloadYogaToKarateFrames() {
+      return new Promise((resolve) => {
+        for (let i = 1; i <= YOGA_TO_KARATE_FRAME_COUNT; i++) {
+          const img = new Image();
+          const frameNum = String(i).padStart(4, '0');
+          img.src = YOGA_TO_KARATE_FRAME_PATH + frameNum + YOGA_TO_KARATE_FRAME_EXT;
+          img.onload = () => { imagesLoadedYogaToKarate++; if (imagesLoadedYogaToKarate === YOGA_TO_KARATE_FRAME_COUNT) resolve(); };
+          img.onerror = () => { imagesLoadedYogaToKarate++; if (imagesLoadedYogaToKarate === YOGA_TO_KARATE_FRAME_COUNT) resolve(); };
+          yogaToKarateFrames[i - 1] = img;
+        }
+      });
+    }
+
     function preloadInitialVideos() {
       return new Promise((resolve) => {
         let videosLoaded = 0;
@@ -834,12 +885,12 @@
     function preloadRemainingVideos() {
       return new Promise((resolve) => {
         let videosLoaded = 0;
-        const totalVideos = 4;
+        const totalVideos = 5;
         function checkComplete() {
           videosLoaded++;
           if (videosLoaded === totalVideos) resolve();
         }
-        const videos = [scene4Video, scene5Video, scene6Video, scene7Video];
+        const videos = [scene4Video, scene5Video, scene6Video, scene7Video, breathingSceneVideo];
         videos.forEach(function(video) {
           if (video.readyState >= 3) {
             checkComplete();
@@ -903,6 +954,15 @@
         canvas6.width = firstFrame.naturalWidth;
         canvas6.height = firstFrame.naturalHeight;
         drawFrame6(0);
+      }
+    }
+
+    function setupYogaToKarateCanvas() {
+      const firstFrame = yogaToKarateFrames[0];
+      if (firstFrame && firstFrame.naturalWidth) {
+        yogaToKarateCanvas.width = firstFrame.naturalWidth;
+        yogaToKarateCanvas.height = firstFrame.naturalHeight;
+        drawYogaToKarateFrame(0);
       }
     }
 
@@ -999,6 +1059,15 @@
           frameSoundOutro.currentTime = 0;
           frameSoundOutro.play().catch(err => console.log('Audio play failed:', err));
         }
+      }
+    }
+
+    function drawYogaToKarateFrame(index) {
+      const frame = yogaToKarateFrames[index];
+      if (frame && frame.complete) {
+        ctxYogaToKarate.clearRect(0, 0, yogaToKarateCanvas.width, yogaToKarateCanvas.height);
+        ctxYogaToKarate.drawImage(frame, 0, 0);
+        currentYogaToKarateFrame = index;
       }
     }
 
@@ -1121,6 +1190,18 @@
       requestAnimationFrame(animate6);
     }
 
+    function animateYogaToKarate() {
+      const diff = targetYogaToKarateFrame - currentYogaToKarateFrame;
+      if (Math.abs(diff) > 0.01) {
+        const step = diff * 0.25;
+        const nextFrame = Math.abs(step) < 1 ? currentYogaToKarateFrame + Math.sign(diff) : Math.round(currentYogaToKarateFrame + step);
+        if (nextFrame !== currentYogaToKarateFrame && nextFrame >= 0 && nextFrame < YOGA_TO_KARATE_FRAME_COUNT) {
+          drawYogaToKarateFrame(nextFrame);
+        }
+      }
+      requestAnimationFrame(animateYogaToKarate);
+    }
+
     function initLenis() {
       lenis = new Lenis({
         duration: 1.2,
@@ -1194,7 +1275,7 @@
           }
         }
 
-        // CANVAS-3: Normal scroll behavior - trigger at 95% progress
+        // CANVAS-3: Normal scroll behavior - trigger at 98% progress
         if (canvas3Section.offsetParent !== null) {
           var sectionTop3 = canvas3Section.offsetTop;
           var sectionHeight3 = canvas3Section.offsetHeight - window.innerHeight;
@@ -1207,8 +1288,27 @@
           }
           updateCanvasProgress(3, sectionProgress3);
           
+          // trigger breathing scene at 98% Progress
+          if (sectionProgress3 >= 0.98 && !breathingScenePlayed) {
+            playBreathingScene();
+          }
+        }
+
+        // YOGA-TO-KARATE CANVAS: Normal scroll behavior - trigger at 98% progress
+        if (yogaToKarateSection.offsetParent !== null) {
+          var sectionTopYoga = yogaToKarateSection.offsetTop;
+          var sectionHeightYoga = yogaToKarateSection.offsetHeight - window.innerHeight;
+          var scrollInSectionYoga = scroll - sectionTopYoga;
+          var sectionProgressYoga = Math.max(0, Math.min(1, scrollInSectionYoga / sectionHeightYoga));
+          
+          targetYogaToKarateFrame = Math.floor(sectionProgressYoga * (YOGA_TO_KARATE_FRAME_COUNT - 1));
+          if (targetYogaToKarateFrame !== currentYogaToKarateFrame && targetYogaToKarateFrame >= 0 && targetYogaToKarateFrame < YOGA_TO_KARATE_FRAME_COUNT) {
+            drawYogaToKarateFrame(targetYogaToKarateFrame);
+          }
+          updateCanvasProgress('yoga', sectionProgressYoga);
+          
           // trigger next scene at 98% Progress
-          if (sectionProgress3 >= 0.98 && !scene5Played) {
+          if (sectionProgressYoga >= 0.98 && !scene5Played) {
             playScene5();
           }
         }
@@ -1303,7 +1403,7 @@
       
       scene1Video.play();
       
-      var videosToWarm = [scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video];
+      var videosToWarm = [scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video, breathingSceneVideo];
       videosToWarm.forEach(function(video, index) {
         warmingUpVideos.add(video);
         video.muted = true;
@@ -1379,11 +1479,30 @@
       }, { once: true });
     }
 
+    function playBreathingScene() {
+      if (breathingScenePlayed) return;
+      breathingScenePlayed = true;
+      document.body.classList.add('no-scroll');
+      canvas3Section.style.display = 'none';
+      breathingSceneSection.style.display = 'flex';
+      breathingSceneSection.classList.remove('paused');
+      window.scrollTo(0, breathingSceneSection.offsetTop);
+      breathingSceneVideo.play();
+      breathingSceneVideo.addEventListener('ended', function() {
+        document.body.classList.remove('no-scroll');
+        breathingSceneSection.style.display = 'none';
+        drawYogaToKarateFrame(0);
+        yogaToKarateSection.style.display = 'block';
+        window.scrollTo(0, yogaToKarateSection.offsetTop);
+        maxScrollReached = yogaToKarateSection.offsetTop;
+      }, { once: true });
+    }
+
     function playScene5() {
       if (scene5Played) return;
       scene5Played = true;
       document.body.classList.add('no-scroll');
-      canvas3Section.style.display = 'none';
+      yogaToKarateSection.style.display = 'none';
       scene5Section.style.display = 'flex';
       scene5Section.classList.remove('paused');
       window.scrollTo(0, scene5Section.offsetTop);
@@ -1448,7 +1567,7 @@
     }
 
     function setupVideoPausePlay() {
-      var videoScenes = [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video];
+      var videoScenes = [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video, breathingSceneVideo];
       videoScenes.forEach(function(video) {
         video.addEventListener('play', function() {
           if (warmingUpVideos.has(video)) return;
@@ -1467,8 +1586,13 @@
     }
 
     function updateCanvasProgress(canvasIndex, progress) {
-      var progressCircles = [progressCircle1, progressCircle2, progressCircle3, progressCircle4, progressCircle5, progressCircle6];
-      var circle = progressCircles[canvasIndex - 1];
+      var circle;
+      if (canvasIndex === 'yoga') {
+        circle = progressCircleYoga;
+      } else {
+        var progressCircles = [progressCircle1, progressCircle2, progressCircle3, progressCircle4, progressCircle5, progressCircle6];
+        circle = progressCircles[canvasIndex - 1];
+      }
       if (!circle) return;
       var fillElement = circle.querySelector('.progress-fill');
       if (fillElement) {
@@ -1525,12 +1649,14 @@
       scene5Section.style.display = 'none';
       scene6Section.style.display = 'none';
       scene7Section.style.display = 'none';
+      breathingSceneSection.style.display = 'none';
       canvas1Section.style.display = 'none';
       canvas2Section.style.display = 'none';
       canvas3Section.style.display = 'none';
       canvas4Section.style.display = 'none';
       canvas5Section.style.display = 'none';
       canvas6Section.style.display = 'none';
+      yogaToKarateSection.style.display = 'none';
       
       resetCanvas6UI();
       
@@ -1541,8 +1667,9 @@
       scene5Section.classList.remove('paused');
       scene6Section.classList.remove('paused');
       scene7Section.classList.remove('paused');
+      breathingSceneSection.classList.remove('paused');
       
-      [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video].forEach(function(video) {
+      [scene1Video, scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video, breathingSceneVideo].forEach(function(video) {
         video.pause();
         video.currentTime = 0;
       });
@@ -1550,6 +1677,7 @@
       for (var i = 1; i <= 6; i++) {
         updateCanvasProgress(i, 0);
       }
+      updateCanvasProgress('yoga', 0);
       
       currentFrame = 0; targetFrame = 0;
       currentFrame2 = 0; targetFrame2 = 0;
@@ -1557,6 +1685,7 @@
       currentFrame4 = 0; targetFrame4 = 0;
       currentFrame5 = 0; targetFrame5 = 0;
       currentFrame6 = 0; targetFrame6 = 0;
+      currentYogaToKarateFrame = 0; targetYogaToKarateFrame = 0;
       
       scene1Played = false;
       scene2Played = false;
@@ -1564,6 +1693,7 @@
       scene5Played = false;
       scene6Played = false;
       scene7Played = false;
+      breathingScenePlayed = false;
       
       // Reset sound flags so sounds can play again when navigating from menu
       soundPlayedAtWhoose = false;
@@ -1734,12 +1864,14 @@
         preloadFrames3(),
         preloadFrames4(),
         preloadFrames5(),
-        preloadFrames6()
+        preloadFrames6(),
+        preloadYogaToKarateFrames()
       ]);
       setupCanvas3();
       setupCanvas4();
       setupCanvas5();
       setupCanvas6();
+      setupYogaToKarateCanvas();
       console.log('Background loading complete');
     }
 
@@ -1757,10 +1889,10 @@
       // Reset sound flags
       soundPlayedAtWhoose = false;
       soundPlayedAtFrameSunTransition = false;
-      soundPlayedAtFrame_3 = false;
-      soundPlayedAtFrame_4 = false;
-      soundPlayedAtFrame_5 = false;
-      soundPlayedAtFrame_6 = false;
+      soundPlayedAtFrameBreath = false;
+      soundPlayedAtDojoToPot = false;
+      soundPlayedAtFrameGrass = false;
+      soundPlayedAtFrameOutro = false;
       
       canvas1Section.style.display = 'block';
       canvas2Section.style.display = 'none';
@@ -1768,12 +1900,14 @@
       canvas4Section.style.display = 'none';
       canvas5Section.style.display = 'none';
       canvas6Section.style.display = 'none';
+      yogaToKarateSection.style.display = 'none';
       scene2Section.style.display = 'none';
       scene3Section.style.display = 'none';
       scene4Section.style.display = 'none';
       scene5Section.style.display = 'none';
       scene6Section.style.display = 'none';
       scene7Section.style.display = 'none';
+      breathingSceneSection.style.display = 'none';
       
       await preloadInitialVideos();
       await Promise.all([preloadFrames(), preloadFrames2()]);
@@ -1796,6 +1930,7 @@
       animate4();
       animate5();
       animate6();
+      animateYogaToKarate();
       
       loadRemainingResources();
     }

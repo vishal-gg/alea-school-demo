@@ -674,6 +674,7 @@
     const frameSoundBreath = new Audio('sfx/breath.mp3');
     const frameSoundGrass = new Audio('sfx/grass.mp3');
     const frameSoundOutro = new Audio('sfx/outro.mp3');
+    const frameSoundDojoToPot = new Audio('sfx/dojo-to-pot.mp3');
 
     // Frame thresholds for playing sounds
     const SOUND_FRAME_THRESHOLD_WHOOSE = 1;
@@ -681,6 +682,7 @@
     const SOUND_FRAME_THRESHOLD_BREATH = 20;
     const SOUND_FRAME_THRESHOLD_GRASS = 5;
     const SOUND_FRAME_THRESHOLD_OUTRO = 3;
+    const SOUND_FRAME_THRESHOLD_DOJO_TO_POT = 3;
 
     // Track if sound has been played for each animation
     let soundPlayedAtWhoose = false;
@@ -688,6 +690,7 @@
     let soundPlayedAtFrameBreath = false;
     let soundPlayedAtFrameGrass = false;
     let soundPlayedAtFrameOutro = false;
+    let soundPlayedAtDojoToPot = false;
 
     function preloadFrames() {
       return new Promise((resolve) => {
@@ -957,6 +960,13 @@
         ctx4.clearRect(0, 0, canvas4.width, canvas4.height);
         ctx4.drawImage(frame, 0, 0);
         currentFrame4 = index;
+        
+        // Play sound when threshold frame is reached
+        if (index >= SOUND_FRAME_THRESHOLD_DOJO_TO_POT && !soundPlayedAtDojoToPot) {
+          soundPlayedAtDojoToPot = true;
+          frameSoundDojoToPot.currentTime = 0;
+          frameSoundDojoToPot.play().catch(err => console.log('Audio play failed:', err));
+        }
       }
     }
 
@@ -1561,6 +1571,7 @@
       soundPlayedAtFrameBreath = false;
       soundPlayedAtFrameGrass = false;
       soundPlayedAtFrameOutro = false;
+      soundPlayedAtDojoToPot = false;
       
       if (!lenis) initLenis();
       

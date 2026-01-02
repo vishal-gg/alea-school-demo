@@ -666,22 +666,22 @@
     let initialLoadingComplete = false;
 
     // Audio elements for frame sounds
-    const frameSound1 = new Audio('sfx/whoose.mp3');
-    const frameSound2 = new Audio('sfx/basket-ball-to-arieal.mp3');
+    const frameSoundWhoose = new Audio('sfx/whoose.mp3');
+    const frameSoundSunTransition = new Audio('sfx/basket-ball-to-arieal.mp3');
     const frameSoundBreath = new Audio('sfx/breath.mp3');
     const frameSoundGrass = new Audio('sfx/grass.mp3');
     const frameSoundOutro = new Audio('sfx/outro.mp3');
 
     // Frame thresholds for playing sounds
-    const SOUND_FRAME_THRESHOLD_1 = 1;
-    const SOUND_FRAME_THRESHOLD_2 = 1;
+    const SOUND_FRAME_THRESHOLD_WHOOSE = 1;
+    const SOUND_FRAME_THRESHOLD_SUN_TRANSITION = 1;
     const SOUND_FRAME_THRESHOLD_BREATH = 20;
     const SOUND_FRAME_THRESHOLD_GRASS = 5;
     const SOUND_FRAME_THRESHOLD_OUTRO = 3;
 
     // Track if sound has been played for each animation
-    let soundPlayedAtFrame = false;
-    let soundPlayedAtFrame_2 = false;
+    let soundPlayedAtWhoose = false;
+    let soundPlayedAtFrameSunTransition = false;
     let soundPlayedAtFrameBreath = false;
     let soundPlayedAtFrameGrass = false;
     let soundPlayedAtFrameOutro = false;
@@ -908,10 +908,10 @@
         currentFrame = index;
         
         // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_1 && !soundPlayedAtFrame) {
-          soundPlayedAtFrame = true;
-          frameSound1.currentTime = 0;
-          frameSound1.play().catch(err => console.log('Audio play failed:', err));
+        if (index >= SOUND_FRAME_THRESHOLD_WHOOSE && !soundPlayedAtWhoose) {
+          soundPlayedAtWhoose = true;
+          frameSoundWhoose.currentTime = 0;
+          frameSoundWhoose.play().catch(err => console.log('Audio play failed:', err));
         }
       }
     }
@@ -924,10 +924,10 @@
         currentFrame2 = index;
         
         // Play sound when threshold frame is reached
-        if (index >= SOUND_FRAME_THRESHOLD_2 && !soundPlayedAtFrame_2) {
-          soundPlayedAtFrame_2 = true;
-          frameSound2.currentTime = 0;
-          frameSound2.play().catch(err => console.log('Audio play failed:', err));
+        if (index >= SOUND_FRAME_THRESHOLD_SUN_TRANSITION && !soundPlayedAtFrameSunTransition) {
+          soundPlayedAtFrameSunTransition = true;
+          frameSoundSunTransition.currentTime = 0;
+          frameSoundSunTransition.play().catch(err => console.log('Audio play failed:', err));
         }
       }
     }
@@ -1553,8 +1553,8 @@
       scene7Played = false;
       
       // Reset sound flags so sounds can play again when navigating from menu
-      soundPlayedAtFrame = false;
-      soundPlayedAtFrame_2 = false;
+      soundPlayedAtWhoose = false;
+      soundPlayedAtFrameSunTransition = false;
       soundPlayedAtFrameBreath = false;
       soundPlayedAtFrameGrass = false;
       soundPlayedAtFrameOutro = false;
@@ -1741,8 +1741,8 @@
       maxScrollReached = 0;
       
       // Reset sound flags
-      soundPlayedAtFrame = false;
-      soundPlayedAtFrame_2 = false;
+      soundPlayedAtWhoose = false;
+      soundPlayedAtFrameSunTransition = false;
       soundPlayedAtFrame_3 = false;
       soundPlayedAtFrame_4 = false;
       soundPlayedAtFrame_5 = false;

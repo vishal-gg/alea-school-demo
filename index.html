@@ -711,7 +711,9 @@
     
     // Auto-complete flags for canvases that auto-scroll on first interaction
     let canvas1FirstScrollTriggered = false;
+    let canvas2FirstScrollTriggered = false;
     let canvas3FirstScrollTriggered = false;
+    let canvas4FirstScrollTriggered = false;
     let yogaToKarateFirstScrollTriggered = false;
     let canvas5FirstScrollTriggered = false;
     let canvas6FirstScrollTriggered = false;
@@ -1113,9 +1115,15 @@
           if (canvasIndex === 1) {
             currentFrame = frameCount - 1;
             targetFrame = frameCount - 1;
+          } else if (canvasIndex === 2) {
+            currentFrame2 = frameCount - 1;
+            targetFrame2 = frameCount - 1;
           } else if (canvasIndex === 3) {
             currentFrame3 = frameCount - 1;
             targetFrame3 = frameCount - 1;
+          } else if (canvasIndex === 4) {
+            currentFrame4 = frameCount - 1;
+            targetFrame4 = frameCount - 1;
           } else if (canvasIndex === 'yoga') {
             currentYogaToKarateFrame = frameCount - 1;
             targetYogaToKarateFrame = frameCount - 1;
@@ -1151,12 +1159,14 @@
     }
 
     function animate2() {
-      const diff = targetFrame2 - currentFrame2;
-      if (Math.abs(diff) > 0.01) {
-        const step = diff * 0.25;
-        const nextFrame = Math.abs(step) < 1 ? currentFrame2 + Math.sign(diff) : Math.round(currentFrame2 + step);
-        if (nextFrame !== currentFrame2 && nextFrame >= 0 && nextFrame < FRAME_COUNT_2) {
-          drawFrame2(nextFrame);
+      if (!isAutoAnimating) {
+        const diff = targetFrame2 - currentFrame2;
+        if (Math.abs(diff) > 0.01) {
+          const step = diff * 0.25;
+          const nextFrame = Math.abs(step) < 1 ? currentFrame2 + Math.sign(diff) : Math.round(currentFrame2 + step);
+          if (nextFrame !== currentFrame2 && nextFrame >= 0 && nextFrame < FRAME_COUNT_2) {
+            drawFrame2(nextFrame);
+          }
         }
       }
       requestAnimationFrame(animate2);
@@ -1177,12 +1187,14 @@
     }
 
     function animate4() {
-      const diff = targetFrame4 - currentFrame4;
-      if (Math.abs(diff) > 0.01) {
-        const step = diff * 0.25;
-        const nextFrame = Math.abs(step) < 1 ? currentFrame4 + Math.sign(diff) : Math.round(currentFrame4 + step);
-        if (nextFrame !== currentFrame4 && nextFrame >= 0 && nextFrame < FRAME_COUNT_4) {
-          drawFrame4(nextFrame);
+      if (!isAutoAnimating) {
+        const diff = targetFrame4 - currentFrame4;
+        if (Math.abs(diff) > 0.01) {
+          const step = diff * 0.25;
+          const nextFrame = Math.abs(step) < 1 ? currentFrame4 + Math.sign(diff) : Math.round(currentFrame4 + step);
+          if (nextFrame !== currentFrame4 && nextFrame >= 0 && nextFrame < FRAME_COUNT_4) {
+            drawFrame4(nextFrame);
+          }
         }
       }
       requestAnimationFrame(animate4);
@@ -1284,12 +1296,18 @@
           }
         }
 
-        // CANVAS-2: Normal scroll behavior - trigger at 95% progress
+        // CANVAS-2: Auto-complete on first scroll
         if (canvas2Section.offsetParent !== null) {
           var sectionTop2 = canvas2Section.offsetTop;
           var sectionHeight2 = canvas2Section.offsetHeight - window.innerHeight;
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
+          
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01) {
+            canvas2FirstScrollTriggered = true;
+            animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
+            return;
+          }
           
           targetFrame2 = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
           if (targetFrame2 !== currentFrame2 && targetFrame2 >= 0 && targetFrame2 < FRAME_COUNT_2) {
@@ -1297,7 +1315,6 @@
           }
           updateCanvasProgress(2, sectionProgress2);
           
-          // trigger next scene at 98% Progress
           if (sectionProgress2 >= 0.98 && !scene4Played) {
             playScene4();
           }
@@ -1351,12 +1368,18 @@
           }
         }
 
-        // CANVAS-4: Normal scroll behavior - trigger at 95% progress
+        // CANVAS-4: Auto-complete on first scroll
         if (canvas4Section.offsetParent !== null) {
           var sectionTop4 = canvas4Section.offsetTop;
           var sectionHeight4 = canvas4Section.offsetHeight - window.innerHeight;
           var scrollInSection4 = scroll - sectionTop4;
           var sectionProgress4 = Math.max(0, Math.min(1, scrollInSection4 / sectionHeight4));
+          
+          if (!canvas4FirstScrollTriggered && sectionProgress4 > 0.01) {
+            canvas4FirstScrollTriggered = true;
+            animateCanvasToEnd(4, FRAME_COUNT_4, drawFrame4, function() { playScene6(); });
+            return;
+          }
           
           targetFrame4 = Math.floor(sectionProgress4 * (FRAME_COUNT_4 - 1));
           if (targetFrame4 !== currentFrame4 && targetFrame4 >= 0 && targetFrame4 < FRAME_COUNT_4) {
@@ -1364,7 +1387,6 @@
           }
           updateCanvasProgress(4, sectionProgress4);
           
-          // trigger next scene at 98% Progress
           if (sectionProgress4 >= 0.98 && !scene6Played) {
             playScene6();
           }
@@ -1684,7 +1706,9 @@
       isAutoAnimating = false;
       
       canvas1FirstScrollTriggered = false;
+      canvas2FirstScrollTriggered = false;
       canvas3FirstScrollTriggered = false;
+      canvas4FirstScrollTriggered = false;
       yogaToKarateFirstScrollTriggered = false;
       canvas5FirstScrollTriggered = false;
       canvas6FirstScrollTriggered = false;

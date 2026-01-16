@@ -349,7 +349,7 @@
     }
 
     .menu-nav button[data-scene="2"] img {
-      scale: 1.2;
+      scale: 1.136;
       transform-origin: left;
     }
 
@@ -1531,7 +1531,7 @@
       scene4Section.style.display = 'flex';
       scene4Section.classList.remove('paused');
       window.scrollTo(0, scene4Section.offsetTop);
-      updateActiveMenuButton(4);
+      updateActiveMenuButton(5);
       scene4Video.play();
       scene4Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1540,7 +1540,7 @@
         canvas3Section.style.display = 'block';
         window.scrollTo(0, canvas3Section.offsetTop);
         maxScrollReached = canvas3Section.offsetTop;
-        updateActiveMenuButton(4);
+        updateActiveMenuButton(5);
       }, { once: true });
     }
 
@@ -1614,7 +1614,7 @@
       scene7Section.style.display = 'flex';
       scene7Section.classList.remove('paused');
       window.scrollTo(0, scene7Section.offsetTop);
-      updateActiveMenuButton(6);
+      updateActiveMenuButton(7);
       scene7Video.play();
       scene7Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1624,7 +1624,7 @@
         resetCanvas6UI();
         window.scrollTo(0, canvas6Section.offsetTop);
         maxScrollReached = canvas6Section.offsetTop;
-        updateActiveMenuButton(6);
+        updateActiveMenuButton(7);
       }, { once: true });
     }
 

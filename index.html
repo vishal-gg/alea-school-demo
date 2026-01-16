@@ -339,12 +339,18 @@
       justify-content: start;
       clip-path: inset(0% 0% 100% 100%);
       transition: clip-path 0.3s ease;
+      min-width: 200px;
     }
 
     .menu-nav button {
       all: unset;
       display: block;
       padding: 8px;
+    }
+
+    .menu-nav button[data-scene="2"] img {
+      scale: 1.2;
+      transform-origin: left;
     }
 
     .menu-nav button img {

@@ -545,6 +545,35 @@
       from { transform: translateY(-5px); }
       to { transform: translateY(5px); }
     }
+
+    /* Landscape orientation - contain videos and canvases */
+    @media (orientation: landscape) {
+      .scene-1-video,
+      .scene-2-video,
+      .scene-3-video,
+      .scene-4-video,
+      .scene-5-video,
+      .scene-6-video,
+      .scene-7-video,
+      .breathing-scene-video {
+        object-fit: contain;
+        background: #000;
+      }
+
+      #frame-canvas,
+      #frame-canvas-2,
+      #frame-canvas-3,
+      #frame-canvas-4,
+      #frame-canvas-5,
+      #frame-canvas-6,
+      #frame-yoga-to-karate-canvas {
+        object-fit: contain;
+      }
+
+      .canvas-container {
+        background: #000;
+      }
+    }
   </style>
 </head>
 <body class="no-scroll">

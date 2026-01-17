@@ -139,10 +139,120 @@
     .canvas-3-section,
     .canvas-4-section,
     .canvas-5-section,
-    .canvas-6-section,
-    .yoga-to-karate-canvas-section {
+    .canvas-6-section {
       position: relative;
       height: 130vh;
+    }
+    
+    .yoga-to-karate-canvas-section {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .yoga-to-karate-canvas-section .canvas-container {
+      position: relative;
+      height: 100vh;
+    }
+    
+    .swipe-dragger {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    .swipe-track {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      position: relative;
+      pointer-events: auto;
+    }
+    
+    .swipe-thumb {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.1s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .swipe-thumb:active {
+      cursor: grabbing;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .swipe-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: bold;
+      text-shadow: 2px 2px #000;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .swipe-arrow {
+      animation: swipe-hint 1s ease-in-out infinite;
+    }
+    
+    @keyframes swipe-hint {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-5px); }
+    }
+    
+    @keyframes swipe-hint-right {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(5px); }
+    }
+    
+    .swipe-arrow-right {
+      animation: swipe-hint-right 1s ease-in-out infinite;
+    }
+    
+    .canvas-4-section {
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .canvas-4-section .canvas-container {
+      position: relative;
+      height: 100vh;
+    }
+    
+    .swipe-thumb-left {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: auto;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.1s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .swipe-thumb-left:active {
+      cursor: grabbing;
+      transform: translateY(-50%) scale(1.1);
     }
 
     .canvas-1-section {
@@ -517,7 +627,12 @@
   <section class="yoga-to-karate-canvas-section" id="yoga-to-karate-canvas-section">
     <div class="canvas-container">
       <canvas id="frame-yoga-to-karate-canvas"></canvas>
-      <div class="scroll-hint"><div class="inner"><img src="/icons/scroll.svg" alt=""><span class="text">Scroll</span></div></div>
+      <div class="swipe-dragger" id="yoga-swipe-dragger">
+        <div class="swipe-track" id="yoga-swipe-track">
+          <div class="swipe-thumb" id="yoga-swipe-thumb"></div>
+        </div>
+        <div class="swipe-label"><span class="swipe-arrow">&larr;</span> Swipe</div>
+      </div>
       <div class="progress-circle" id="progress-circle-yoga">
         <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
       </div>
@@ -532,7 +647,12 @@
   <section class="canvas-4-section" id="canvas-4-section">
     <div class="canvas-container">
       <canvas id="frame-canvas-4"></canvas>
-      <div class="scroll-hint"><div class="inner"><img src="/icons/scroll.svg" alt=""><span class="text">Scroll</span></div></div>
+      <div class="swipe-dragger" id="canvas4-swipe-dragger">
+        <div class="swipe-track" id="canvas4-swipe-track">
+          <div class="swipe-thumb-left" id="canvas4-swipe-thumb"></div>
+        </div>
+        <div class="swipe-label">Swipe <span class="swipe-arrow-right">&rarr;</span></div>
+      </div>
       <div class="progress-circle" id="progress-circle-4">
         <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
       </div>
@@ -636,6 +756,9 @@
     const canvas4 = document.getElementById('frame-canvas-4');
     const ctx4 = canvas4.getContext('2d');
     const canvas4Section = document.getElementById('canvas-4-section');
+    const canvas4SwipeDragger = document.getElementById('canvas4-swipe-dragger');
+    const canvas4SwipeTrack = document.getElementById('canvas4-swipe-track');
+    const canvas4SwipeThumb = document.getElementById('canvas4-swipe-thumb');
     const canvas5 = document.getElementById('frame-canvas-5');
     const ctx5 = canvas5.getContext('2d');
     const canvas5Section = document.getElementById('canvas-5-section');
@@ -647,6 +770,9 @@
     const yogaToKarateCanvas = document.getElementById('frame-yoga-to-karate-canvas');
     const ctxYogaToKarate = yogaToKarateCanvas.getContext('2d');
     const yogaToKarateSection = document.getElementById('yoga-to-karate-canvas-section');
+    const yogaSwipeDragger = document.getElementById('yoga-swipe-dragger');
+    const yogaSwipeTrack = document.getElementById('yoga-swipe-track');
+    const yogaSwipeThumb = document.getElementById('yoga-swipe-thumb');
     const breathingSceneSection = document.getElementById('breathing-scene-section');
     const breathingSceneVideo = document.getElementById('breathing-scene-video');
     const rewindButton = document.getElementById('rewind-button');
@@ -1126,6 +1252,179 @@
       }
     }
 
+    // Yoga swipe handler
+    let yogaSwipeActive = false;
+    let yogaSwipeStartX = 0;
+    let yogaSwipeProgress = 0;
+    
+    function setupYogaSwipe() {
+      if (!yogaSwipeTrack || !yogaSwipeThumb) return;
+      
+      const trackWidth = 200;
+      const thumbWidth = 24;
+      const maxOffset = trackWidth - thumbWidth;
+      
+      function updateThumbPosition(progress) {
+        const offset = (1 - progress) * maxOffset;
+        yogaSwipeThumb.style.right = 'auto';
+        yogaSwipeThumb.style.left = offset + 'px';
+      }
+      
+      function handleSwipeStart(e) {
+        if (yogaToKarateFirstScrollTriggered) return;
+        yogaSwipeActive = true;
+        yogaSwipeStartX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      }
+      
+      function handleSwipeMove(e) {
+        if (!yogaSwipeActive || yogaToKarateFirstScrollTriggered) return;
+        
+        const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const deltaX = yogaSwipeStartX - currentX;
+        
+        yogaSwipeProgress = Math.max(0, Math.min(1, deltaX / 150));
+        
+        updateThumbPosition(yogaSwipeProgress);
+        
+        const frameIndex = Math.floor(yogaSwipeProgress * (YOGA_TO_KARATE_FRAME_COUNT - 1));
+        if (frameIndex !== currentYogaToKarateFrame) {
+          drawYogaToKarateFrame(frameIndex);
+        }
+        updateCanvasProgress('yoga', yogaSwipeProgress);
+        
+        if (yogaSwipeProgress >= 0.95) {
+          yogaSwipeActive = false;
+          yogaToKarateFirstScrollTriggered = true;
+          if (yogaSwipeDragger) yogaSwipeDragger.style.display = 'none';
+          drawYogaToKarateFrame(YOGA_TO_KARATE_FRAME_COUNT - 1);
+          updateCanvasProgress('yoga', 1);
+          currentYogaToKarateFrame = YOGA_TO_KARATE_FRAME_COUNT - 1;
+          targetYogaToKarateFrame = YOGA_TO_KARATE_FRAME_COUNT - 1;
+          setTimeout(function() { playScene5(); }, 100);
+        }
+        
+        e.preventDefault();
+      }
+      
+      function handleSwipeEnd() {
+        if (!yogaSwipeActive) return;
+        yogaSwipeActive = false;
+        
+        if (yogaSwipeProgress < 0.95 && !yogaToKarateFirstScrollTriggered) {
+          yogaSwipeProgress = 0;
+          updateThumbPosition(0);
+          drawYogaToKarateFrame(0);
+          updateCanvasProgress('yoga', 0);
+        }
+      }
+      
+      yogaSwipeTrack.addEventListener('mousedown', handleSwipeStart);
+      yogaSwipeThumb.addEventListener('mousedown', handleSwipeStart);
+      document.addEventListener('mousemove', handleSwipeMove);
+      document.addEventListener('mouseup', handleSwipeEnd);
+      
+      yogaSwipeTrack.addEventListener('touchstart', handleSwipeStart, { passive: false });
+      yogaSwipeThumb.addEventListener('touchstart', handleSwipeStart, { passive: false });
+      document.addEventListener('touchmove', handleSwipeMove, { passive: false });
+      document.addEventListener('touchend', handleSwipeEnd);
+      
+      yogaToKarateSection.addEventListener('touchstart', function(e) {
+        if (yogaToKarateFirstScrollTriggered) return;
+        yogaSwipeActive = true;
+        yogaSwipeStartX = e.touches[0].clientX;
+      }, { passive: true });
+      
+      yogaToKarateSection.addEventListener('touchmove', handleSwipeMove, { passive: false });
+      yogaToKarateSection.addEventListener('touchend', handleSwipeEnd);
+    }
+
+    // Canvas-4 swipe handler (left-to-right)
+    let canvas4SwipeActive = false;
+    let canvas4SwipeStartX = 0;
+    let canvas4SwipeProgress = 0;
+    
+    function setupCanvas4Swipe() {
+      if (!canvas4SwipeTrack || !canvas4SwipeThumb) return;
+      
+      const trackWidth = 200;
+      const thumbWidth = 24;
+      const maxOffset = trackWidth - thumbWidth;
+      
+      function updateThumbPosition(progress) {
+        const offset = progress * maxOffset;
+        canvas4SwipeThumb.style.left = offset + 'px';
+      }
+      
+      function handleSwipeStart(e) {
+        if (canvas4FirstScrollTriggered) return;
+        canvas4SwipeActive = true;
+        canvas4SwipeStartX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      } 
+      
+      function handleSwipeMove(e) {
+        if (!canvas4SwipeActive || canvas4FirstScrollTriggered) return;
+        
+        const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const deltaX = currentX - canvas4SwipeStartX;
+        
+        canvas4SwipeProgress = Math.max(0, Math.min(1, deltaX / 150));
+        
+        updateThumbPosition(canvas4SwipeProgress);
+        
+        const frameIndex = Math.floor(canvas4SwipeProgress * (FRAME_COUNT_4 - 1));
+        if (frameIndex !== currentFrame4) {
+          drawFrame4(frameIndex);
+        }
+        updateCanvasProgress(4, canvas4SwipeProgress);
+        
+        if (canvas4SwipeProgress >= 0.95) {
+          canvas4SwipeActive = false;
+          canvas4FirstScrollTriggered = true;
+          if (canvas4SwipeDragger) canvas4SwipeDragger.style.display = 'none';
+          drawFrame4(FRAME_COUNT_4 - 1);
+          updateCanvasProgress(4, 1);
+          currentFrame4 = FRAME_COUNT_4 - 1;
+          targetFrame4 = FRAME_COUNT_4 - 1;
+          setTimeout(function() { playScene6(); }, 100);
+        }
+        
+        e.preventDefault();
+      }
+      
+      function handleSwipeEnd() {
+        if (!canvas4SwipeActive) return;
+        canvas4SwipeActive = false;
+        
+        if (canvas4SwipeProgress < 0.95 && !canvas4FirstScrollTriggered) {
+          canvas4SwipeProgress = 0;
+          updateThumbPosition(0);
+          drawFrame4(0);
+          updateCanvasProgress(4, 0);
+        }
+      }
+      
+      canvas4SwipeTrack.addEventListener('mousedown', handleSwipeStart);
+      canvas4SwipeThumb.addEventListener('mousedown', handleSwipeStart);
+      document.addEventListener('mousemove', handleSwipeMove);
+      document.addEventListener('mouseup', handleSwipeEnd);
+      
+      canvas4SwipeTrack.addEventListener('touchstart', handleSwipeStart, { passive: false });
+      canvas4SwipeThumb.addEventListener('touchstart', handleSwipeStart, { passive: false });
+      document.addEventListener('touchmove', handleSwipeMove, { passive: false });
+      document.addEventListener('touchend', handleSwipeEnd);
+      
+      canvas4Section.addEventListener('touchstart', function(e) {
+        if (canvas4FirstScrollTriggered) return;
+        canvas4SwipeActive = true;
+        canvas4SwipeStartX = e.touches[0].clientX;
+      }, { passive: true });
+      
+      canvas4Section.addEventListener('touchmove', handleSwipeMove, { passive: false });
+      canvas4Section.addEventListener('touchend', handleSwipeEnd);
+    }
+
     // Auto-complete animation - used for canvas 1, 3, yoga-to-karate, 5, and 6
     function animateCanvasToEnd(canvasIndex, frameCount, drawFunction, onComplete) {
       const duration = frameCount * 25;
@@ -1227,7 +1526,7 @@
     }
 
     function animate4() {
-      if (!isAutoAnimating) {
+      if (!isAutoAnimating && !canvas4SwipeActive) {
         const diff = targetFrame4 - currentFrame4;
         if (Math.abs(diff) > 0.01) {
           const step = diff * 0.25;
@@ -1269,7 +1568,7 @@
     }
 
     function animateYogaToKarate() {
-      if (!isAutoAnimating) {
+      if (!isAutoAnimating && !yogaSwipeActive) {
         const diff = targetYogaToKarateFrame - currentYogaToKarateFrame;
         if (Math.abs(diff) > 0.01) {
           const step = diff * 0.25;
@@ -1384,51 +1683,23 @@
           }
         }
 
-        // YOGA-TO-KARATE CANVAS: Auto-complete on first scroll
-        if (yogaToKarateSection.offsetParent !== null) {
-          var sectionTopYoga = yogaToKarateSection.offsetTop;
-          var sectionHeightYoga = yogaToKarateSection.offsetHeight - window.innerHeight;
-          var scrollInSectionYoga = scroll - sectionTopYoga;
-          var sectionProgressYoga = Math.max(0, Math.min(1, scrollInSectionYoga / sectionHeightYoga));
-          
-          if (!yogaToKarateFirstScrollTriggered && sectionProgressYoga > 0.01) {
-            yogaToKarateFirstScrollTriggered = true;
-            animateCanvasToEnd('yoga', YOGA_TO_KARATE_FRAME_COUNT, drawYogaToKarateFrame, function() { playScene5(); });
-            return;
-          }
-          
-          targetYogaToKarateFrame = Math.floor(sectionProgressYoga * (YOGA_TO_KARATE_FRAME_COUNT - 1));
-          if (targetYogaToKarateFrame !== currentYogaToKarateFrame && targetYogaToKarateFrame >= 0 && targetYogaToKarateFrame < YOGA_TO_KARATE_FRAME_COUNT) {
-            drawYogaToKarateFrame(targetYogaToKarateFrame);
-          }
-          updateCanvasProgress('yoga', sectionProgressYoga);
-          
-          if (sectionProgressYoga >= 0.98 && !scene5Played) {
-            playScene5();
+        // YOGA-TO-KARATE CANVAS: Handled by swipe, lock scroll position only when at this section
+        if (yogaToKarateSection.offsetParent !== null && !yogaToKarateFirstScrollTriggered && !yogaSwipeActive) {
+          var yogaSectionTop = yogaToKarateSection.offsetTop;
+          var scrollNearYoga = scroll >= yogaSectionTop - 50 && scroll <= yogaSectionTop + 50;
+          if (scrollNearYoga) {
+            lenis.scrollTo(yogaSectionTop, { immediate: true });
+            maxScrollReached = yogaSectionTop;
           }
         }
 
-        // CANVAS-4: Auto-complete on first scroll
-        if (canvas4Section.offsetParent !== null) {
-          var sectionTop4 = canvas4Section.offsetTop;
-          var sectionHeight4 = canvas4Section.offsetHeight - window.innerHeight;
-          var scrollInSection4 = scroll - sectionTop4;
-          var sectionProgress4 = Math.max(0, Math.min(1, scrollInSection4 / sectionHeight4));
-          
-          if (!canvas4FirstScrollTriggered && sectionProgress4 > 0.01) {
-            canvas4FirstScrollTriggered = true;
-            animateCanvasToEnd(4, FRAME_COUNT_4, drawFrame4, function() { playScene6(); });
-            return;
-          }
-          
-          targetFrame4 = Math.floor(sectionProgress4 * (FRAME_COUNT_4 - 1));
-          if (targetFrame4 !== currentFrame4 && targetFrame4 >= 0 && targetFrame4 < FRAME_COUNT_4) {
-            drawFrame4(targetFrame4);
-          }
-          updateCanvasProgress(4, sectionProgress4);
-          
-          if (sectionProgress4 >= 0.98 && !scene6Played) {
-            playScene6();
+        // CANVAS-4: Handled by swipe, lock scroll position only when at this section
+        if (canvas4Section.offsetParent !== null && !canvas4FirstScrollTriggered && !canvas4SwipeActive) {
+          var canvas4SectionTop = canvas4Section.offsetTop;
+          var scrollNearCanvas4 = scroll >= canvas4SectionTop - 50 && scroll <= canvas4SectionTop + 50;
+          if (scrollNearCanvas4) {
+            lenis.scrollTo(canvas4SectionTop, { immediate: true });
+            maxScrollReached = canvas4SectionTop;
           }
         }
 
@@ -1621,6 +1892,11 @@
         breathingSceneSection.style.display = 'none';
         drawYogaToKarateFrame(0);
         yogaToKarateSection.style.display = 'block';
+        if (yogaSwipeDragger) yogaSwipeDragger.style.display = 'flex';
+        if (yogaSwipeThumb) {
+          yogaSwipeThumb.style.right = '0';
+          yogaSwipeThumb.style.left = 'auto';
+        }
         window.scrollTo(0, yogaToKarateSection.offsetTop);
         maxScrollReached = yogaToKarateSection.offsetTop;
         startScrollingSound();
@@ -1643,6 +1919,8 @@
         scene5Section.style.display = 'none';
         drawFrame4(0);
         canvas4Section.style.display = 'block';
+        if (canvas4SwipeDragger) canvas4SwipeDragger.style.display = 'flex';
+        if (canvas4SwipeThumb) canvas4SwipeThumb.style.left = '0';
         window.scrollTo(0, canvas4Section.offsetTop);
         maxScrollReached = canvas4Section.offsetTop;
         updateActiveMenuButton(5);
@@ -1793,6 +2071,21 @@
       if (sceneNum === 1) {
         canvas6Finished = false;
       }
+      
+      // Reset yoga swipe UI
+      if (yogaSwipeDragger) yogaSwipeDragger.style.display = 'flex';
+      if (yogaSwipeThumb) {
+        yogaSwipeThumb.style.right = '0';
+        yogaSwipeThumb.style.left = 'auto';
+      }
+      yogaSwipeProgress = 0;
+      
+      // Reset canvas4 swipe UI
+      if (canvas4SwipeDragger) canvas4SwipeDragger.style.display = 'flex';
+      if (canvas4SwipeThumb) {
+        canvas4SwipeThumb.style.left = '0';
+      }
+      canvas4SwipeProgress = 0;
       
       scene1Section.style.display = 'none';
       scene2Section.style.display = 'none';
@@ -2037,6 +2330,8 @@
       setupCanvas5();
       setupCanvas6();
       setupYogaToKarateCanvas();
+      setupYogaSwipe();
+      setupCanvas4Swipe();
       console.log('Background loading complete');
     }
 

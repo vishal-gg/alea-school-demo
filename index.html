@@ -1712,6 +1712,10 @@
           if (!canvas2FirstScrollTriggered && sectionProgress2 > AUTO_COMPLETE_THRESHOLD) {
             canvas2FirstScrollTriggered = true;
             const startFrame = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
+            // Draw frames 0 through startFrame quickly before auto-animating
+            for (let i = 0; i <= startFrame; i++) {
+              drawFrame2(i);
+            }
             animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); }, startFrame);
             return;
           }

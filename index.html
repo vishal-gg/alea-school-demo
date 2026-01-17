@@ -1485,17 +1485,23 @@
     }
 
     // Auto-complete animation - used for canvas 1, 3, yoga-to-karate, 5, and 6
-    function animateCanvasToEnd(canvasIndex, frameCount, drawFunction, onComplete) {
+    function animateCanvasToEnd(canvasIndex, frameCount, drawFunction, onComplete, startProgress) {
+      startProgress = startProgress || 0;
       const duration = frameCount * 25;
       const startTime = performance.now();
-      let currentFrameIndex = 0;
+      const startFrameIndex = Math.floor(startProgress * (frameCount - 1));
+      let currentFrameIndex = startFrameIndex;
+      
+      // Draw starting frame immediately
+      drawFunction(startFrameIndex);
+      updateCanvasProgress(canvasIndex, startProgress);
       
       isAutoAnimating = true;
       document.body.classList.add('no-scroll');
       
       function animateLoop(currentTime) {
         const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+        const progress = Math.min(startProgress + (elapsed / duration) * (1 - startProgress), 1);
         const frameIndex = Math.floor(progress * (frameCount - 1));
         
         if (frameIndex !== currentFrameIndex) {
@@ -1677,9 +1683,9 @@
           var scrollInSection = scroll - sectionTop;
           var sectionProgress = Math.max(0, Math.min(1, scrollInSection / sectionHeight));
           
-          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01) {
+          if (!canvas1FirstScrollTriggered && sectionProgress > 0.03) {
             canvas1FirstScrollTriggered = true;
-            animateCanvasToEnd(1, FRAME_COUNT, drawFrame, function() { playScene2(); });
+            animateCanvasToEnd(1, FRAME_COUNT, drawFrame, function() { playScene2(); }, sectionProgress);
             return;
           }
           
@@ -1701,9 +1707,9 @@
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
           
-          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01) {
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.03) {
             canvas2FirstScrollTriggered = true;
-            animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
+            animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); }, sectionProgress2);
             return;
           }
           
@@ -1725,9 +1731,9 @@
           var scrollInSection3 = scroll - sectionTop3;
           var sectionProgress3 = Math.max(0, Math.min(1, scrollInSection3 / sectionHeight3));
           
-          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01) {
+          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.03) {
             canvas3FirstScrollTriggered = true;
-            animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); });
+            animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); }, sectionProgress3);
             return;
           }
           
@@ -1769,9 +1775,9 @@
           var scrollInSection5 = scroll - sectionTop5;
           var sectionProgress5 = Math.max(0, Math.min(1, scrollInSection5 / sectionHeight5));
           
-          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01) {
+          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.03) {
             canvas5FirstScrollTriggered = true;
-            animateCanvasToEnd(5, FRAME_COUNT_5, drawFrame5, function() { playScene7(); });
+            animateCanvasToEnd(5, FRAME_COUNT_5, drawFrame5, function() { playScene7(); }, sectionProgress5);
             return;
           }
           
@@ -1793,7 +1799,7 @@
           var scrollInSection6 = scroll - sectionTop6;
           var sectionProgress6 = Math.max(0, Math.min(1, scrollInSection6 / sectionHeight6));
           
-          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01) {
+          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.03) {
             canvas6FirstScrollTriggered = true;
             animateCanvasToEnd(6, FRAME_COUNT_6, drawFrame6, function() {
               if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';
@@ -1802,7 +1808,7 @@
               if (progressCircle6) progressCircle6.style.display = 'none';
               canvas6Finished = true;
               stopScrollingSound();
-            });
+            }, sectionProgress6);
             return;
           }
           

@@ -890,18 +890,15 @@
     const frameSoundSunTransition = new Audio('sfx/basket-ball-to-arieal.mp3');
     const frameSoundBreath = new Audio('sfx/breathing.mp3');
     const frameSoundGrass = new Audio('sfx/grass.mp3');
-    const frameSoundOutro = new Audio('sfx/outro.mp3');
+    const frameSoundOutro = new Audio('sfx/outro-2.wav');
     const frameSoundDojoToPot = new Audio('sfx/dojo-to-pot.mp3');
     const scrollingSound = new Audio('sfx/scrolling.wav');
     
     // Set scrolling sound to loop
     scrollingSound.loop = true;
     
-    // Set outro sound to loop from 3 seconds
-    frameSoundOutro.addEventListener('ended', function() {
-      frameSoundOutro.currentTime = 3.5;
-      frameSoundOutro.play().catch(err => console.log('Outro audio loop failed:', err));
-    });
+    // Set outro sound to loop
+    frameSoundOutro.loop = true;
     
     function startScrollingSound() {
       scrollingSound.currentTime = 0;

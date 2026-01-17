@@ -394,8 +394,8 @@
 
     .progress-circle {
       position: absolute;
-      bottom: 2rem;
-      right: 6%;
+      top: 2rem;
+      left: 6%;
       width: 2.5rem;
       height: 2.5rem;
       z-index: 10;
@@ -717,6 +717,7 @@
     let yogaToKarateFirstScrollTriggered = false;
     let canvas5FirstScrollTriggered = false;
     let canvas6FirstScrollTriggered = false;
+    let canvas6Finished = false;
 
     let lastBlurProgress = -1;
     let initialLoadingComplete = false;
@@ -728,6 +729,45 @@
     const frameSoundGrass = new Audio('sfx/grass.mp3');
     const frameSoundOutro = new Audio('sfx/outro.mp3');
     const frameSoundDojoToPot = new Audio('sfx/dojo-to-pot.mp3');
+    const scrollingSound = new Audio('sfx/scrolling.wav');
+    
+    // Set scrolling sound to loop
+    scrollingSound.loop = true;
+    
+    // Set outro sound to loop from 3 seconds
+    frameSoundOutro.addEventListener('ended', function() {
+      frameSoundOutro.currentTime = 3.5;
+      frameSoundOutro.play().catch(err => console.log('Outro audio loop failed:', err));
+    });
+    
+    function startScrollingSound() {
+      scrollingSound.currentTime = 0;
+      scrollingSound.play().catch(function(err) {
+        console.log('Scrolling sound play failed:', err);
+      });
+    }
+    
+    function stopScrollingSound() {
+      scrollingSound.pause();
+      scrollingSound.currentTime = 0;
+    }
+    
+    function pauseAllAudio() {
+      scrollingSound.pause();
+      scrollingSound.currentTime = 0;
+      frameSoundWhoose.pause();
+      frameSoundWhoose.currentTime = 0;
+      frameSoundSunTransition.pause();
+      frameSoundSunTransition.currentTime = 0;
+      frameSoundBreath.pause();
+      frameSoundBreath.currentTime = 0;
+      frameSoundGrass.pause();
+      frameSoundGrass.currentTime = 0;
+      frameSoundOutro.pause();
+      frameSoundOutro.currentTime = 0;
+      frameSoundDojoToPot.pause();
+      frameSoundDojoToPot.currentTime = 0;
+    }
 
     // Frame thresholds for playing sounds
     const SOUND_FRAME_THRESHOLD_WHOOSE = 1;
@@ -1429,6 +1469,9 @@
               if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';
               if (rewindButton) rewindButton.style.display = 'block';
               if (homeLink) homeLink.style.display = 'block';
+              if (progressCircle6) progressCircle6.style.display = 'none';
+              canvas6Finished = true;
+              stopScrollingSound();
             });
             return;
           }
@@ -1438,6 +1481,14 @@
             drawFrame6(targetFrame6);
           }
           updateCanvasProgress(6, sectionProgress6);
+          
+          if (sectionProgress6 >= 0.98) {
+            if (!canvas6Finished) {
+              canvas6Finished = true;
+              if (progressCircle6) progressCircle6.style.display = 'none';
+            }
+            stopScrollingSound();
+          }
           
           if (sectionProgress6 >= 0.9) {
             if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';
@@ -1466,6 +1517,7 @@
       var menuWrap = document.querySelector('.menu-wrap');
       if (menuWrap) menuWrap.style.display = 'flex';
       
+      stopScrollingSound();
       scene1Video.play();
       
       var videosToWarm = [scene2Video, scene3Video, scene4Video, scene5Video, scene6Video, scene7Video, breathingSceneVideo];
@@ -1489,6 +1541,7 @@
         drawFrame(0);
         window.scrollTo(0, canvas1Section.offsetTop);
         maxScrollReached = canvas1Section.offsetTop;
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1501,8 +1554,12 @@
       scene2Section.classList.remove('paused');
       window.scrollTo(0, scene2Section.offsetTop);
       updateActiveMenuButton(2);
+      stopScrollingSound();
       scene2Video.play();
-      scene2Video.addEventListener('ended', function() { playScene3(); }, { once: true });
+      scene2Video.addEventListener('ended', function() { 
+        startScrollingSound();
+        playScene3(); 
+      }, { once: true });
     }
 
     function playScene3() {
@@ -1511,6 +1568,7 @@
       scene3Section.classList.remove('paused');
       window.scrollTo(0, scene3Section.offsetTop);
       updateActiveMenuButton(3);
+      stopScrollingSound();
       scene3Video.play();
       scene3Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1520,6 +1578,7 @@
         window.scrollTo(0, canvas2Section.offsetTop);
         maxScrollReached = canvas2Section.offsetTop;
         updateActiveMenuButton(3);
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1532,6 +1591,7 @@
       scene4Section.classList.remove('paused');
       window.scrollTo(0, scene4Section.offsetTop);
       updateActiveMenuButton(5);
+      stopScrollingSound();
       scene4Video.play();
       scene4Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1541,6 +1601,7 @@
         window.scrollTo(0, canvas3Section.offsetTop);
         maxScrollReached = canvas3Section.offsetTop;
         updateActiveMenuButton(5);
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1553,6 +1614,7 @@
       breathingSceneSection.classList.remove('paused');
       window.scrollTo(0, breathingSceneSection.offsetTop);
       breathingSceneVideo.muted = true;
+      stopScrollingSound();
       breathingSceneVideo.play();
       breathingSceneVideo.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1561,6 +1623,7 @@
         yogaToKarateSection.style.display = 'block';
         window.scrollTo(0, yogaToKarateSection.offsetTop);
         maxScrollReached = yogaToKarateSection.offsetTop;
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1573,6 +1636,7 @@
       scene5Section.classList.remove('paused');
       window.scrollTo(0, scene5Section.offsetTop);
       updateActiveMenuButton(5);
+      stopScrollingSound();
       scene5Video.play();
       scene5Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1582,6 +1646,7 @@
         window.scrollTo(0, canvas4Section.offsetTop);
         maxScrollReached = canvas4Section.offsetTop;
         updateActiveMenuButton(5);
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1594,6 +1659,7 @@
       scene6Section.classList.remove('paused');
       window.scrollTo(0, scene6Section.offsetTop);
       updateActiveMenuButton(6);
+      stopScrollingSound();
       scene6Video.play();
       scene6Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1603,6 +1669,7 @@
         window.scrollTo(0, canvas5Section.offsetTop);
         maxScrollReached = canvas5Section.offsetTop;
         updateActiveMenuButton(6);
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1615,6 +1682,7 @@
       scene7Section.classList.remove('paused');
       window.scrollTo(0, scene7Section.offsetTop);
       updateActiveMenuButton(7);
+      stopScrollingSound();
       scene7Video.play();
       scene7Video.addEventListener('ended', function() {
         document.body.classList.remove('no-scroll');
@@ -1625,6 +1693,7 @@
         window.scrollTo(0, canvas6Section.offsetTop);
         maxScrollReached = canvas6Section.offsetTop;
         updateActiveMenuButton(7);
+        startScrollingSound();
       }, { once: true });
     }
 
@@ -1672,6 +1741,11 @@
       if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'block';
       if (rewindButton) rewindButton.style.display = 'none';
       if (homeLink) homeLink.style.display = 'none';
+      if (canvas6Finished && progressCircle6) {
+        progressCircle6.style.display = 'none';
+      } else if (progressCircle6) {
+        progressCircle6.style.display = 'block';
+      }
     }
 
     var menuWrap = document.querySelector('.menu-wrap');
@@ -1702,6 +1776,8 @@
     function switchToScene(sceneId) {
       var sceneNum = parseInt(sceneId);
       
+      pauseAllAudio();
+      
       menuWrap.classList.remove('open');
       isAutoAnimating = false;
       
@@ -1712,6 +1788,11 @@
       yogaToKarateFirstScrollTriggered = false;
       canvas5FirstScrollTriggered = false;
       canvas6FirstScrollTriggered = false;
+      
+      // Reset canvas6Finished only when going to scene 1 (home)
+      if (sceneNum === 1) {
+        canvas6Finished = false;
+      }
       
       scene1Section.style.display = 'none';
       scene2Section.style.display = 'none';
@@ -1783,6 +1864,7 @@
           scene1Section.style.display = 'flex';
           scene1Section.classList.remove('paused');
           tapOverlay.classList.add('hidden');
+          stopScrollingSound();
           scene1Video.play();
           updateActiveMenuButton(1);
           if (lenis) lenis.scrollTo(0, { immediate: true });
@@ -1797,6 +1879,7 @@
             else window.scrollTo(0, canvas1Section.offsetTop);
             maxScrollReached = canvas1Section.offsetTop;
             updateActiveMenuButton(1);
+            startScrollingSound();
           }, { once: true });
           break;
         case 2:
@@ -1805,6 +1888,7 @@
           if (lenis) lenis.scrollTo(scene2Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene2Section.offsetTop);
           maxScrollReached = scene2Section.offsetTop;
+          stopScrollingSound();
           scene2Video.play();
           updateActiveMenuButton(2);
           scene2Video.addEventListener('ended', function() {
@@ -1813,6 +1897,7 @@
             scene3Section.classList.remove('paused');
             if (lenis) lenis.scrollTo(scene3Section.offsetTop, { immediate: true });
             else window.scrollTo(0, scene3Section.offsetTop);
+            stopScrollingSound();
             scene3Video.play();
             updateActiveMenuButton(3);
             scene3Video.addEventListener('ended', function() {
@@ -1824,6 +1909,7 @@
               else window.scrollTo(0, canvas2Section.offsetTop);
               maxScrollReached = canvas2Section.offsetTop;
               updateActiveMenuButton(3);
+              startScrollingSound();
             }, { once: true });
           }, { once: true });
           break;
@@ -1833,6 +1919,7 @@
           if (lenis) lenis.scrollTo(scene3Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene3Section.offsetTop);
           maxScrollReached = scene3Section.offsetTop;
+          stopScrollingSound();
           scene3Video.play();
           updateActiveMenuButton(3);
           scene3Video.addEventListener('ended', function() {
@@ -1844,6 +1931,7 @@
             else window.scrollTo(0, canvas2Section.offsetTop);
             maxScrollReached = canvas2Section.offsetTop;
             updateActiveMenuButton(3);
+            startScrollingSound();
           }, { once: true });
           break;
         case 5:
@@ -1852,6 +1940,7 @@
           if (lenis) lenis.scrollTo(scene4Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene4Section.offsetTop);
           maxScrollReached = scene4Section.offsetTop;
+          stopScrollingSound();
           scene4Video.play();
           updateActiveMenuButton(5);
           scene4Video.addEventListener('ended', function() {
@@ -1863,6 +1952,7 @@
             else window.scrollTo(0, canvas3Section.offsetTop);
             maxScrollReached = canvas3Section.offsetTop;
             updateActiveMenuButton(5);
+            startScrollingSound();
           }, { once: true });
           break;
         case 6:
@@ -1871,6 +1961,7 @@
           if (lenis) lenis.scrollTo(scene6Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene6Section.offsetTop);
           maxScrollReached = scene6Section.offsetTop;
+          stopScrollingSound();
           scene6Video.play();
           updateActiveMenuButton(6);
           scene6Video.addEventListener('ended', function() {
@@ -1882,6 +1973,7 @@
             else window.scrollTo(0, canvas5Section.offsetTop);
             maxScrollReached = canvas5Section.offsetTop;
             updateActiveMenuButton(6);
+            startScrollingSound();
           }, { once: true });
           break;
         case 7:
@@ -1890,6 +1982,7 @@
           if (lenis) lenis.scrollTo(scene7Section.offsetTop, { immediate: true });
           else window.scrollTo(0, scene7Section.offsetTop);
           maxScrollReached = scene7Section.offsetTop;
+          stopScrollingSound();
           scene7Video.play();
           updateActiveMenuButton(7);
           scene7Video.addEventListener('ended', function() {
@@ -1902,6 +1995,7 @@
             else window.scrollTo(0, canvas6Section.offsetTop);
             maxScrollReached = canvas6Section.offsetTop;
             updateActiveMenuButton(7);
+            startScrollingSound();
           }, { once: true });
           break;
       }
@@ -1956,6 +2050,9 @@
       scene1Played = false;
       scene2Played = false;
       maxScrollReached = 0;
+      
+      // Reset canvas6Finished flag
+      canvas6Finished = false;
       
       // Reset sound flags
       soundPlayedAtWhoose = false;

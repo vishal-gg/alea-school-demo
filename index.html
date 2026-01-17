@@ -908,14 +908,34 @@
       });
     }
     
+    let scrollingSoundFading = false;
+    
     function stopScrollingSound() {
-      scrollingSound.pause();
-      scrollingSound.currentTime = 0;
+      if (scrollingSound.paused || scrollingSoundFading) return;
+      scrollingSoundFading = true;
+      
+      const fadeStep = 0.1;
+      const fadeInterval = 30;
+      const originalVolume = scrollingSound.volume;
+      
+      const fade = setInterval(function() {
+        if (scrollingSound.volume > fadeStep) {
+          scrollingSound.volume -= fadeStep;
+        } else {
+          clearInterval(fade);
+          scrollingSound.pause();
+          scrollingSound.currentTime = 0;
+          scrollingSound.volume = originalVolume;
+          scrollingSoundFading = false;
+        }
+      }, fadeInterval);
     }
     
     function pauseAllAudio() {
-      scrollingSound.pause();
-      scrollingSound.currentTime = 0;
+      // Fade out scrolling sound
+      if (!scrollingSound.paused) {
+        stopScrollingSound();
+      }
       frameSoundWhoose.pause();
       frameSoundWhoose.currentTime = 0;
       frameSoundSunTransition.pause();

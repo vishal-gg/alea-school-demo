@@ -157,7 +157,6 @@
     
     .swipe-dragger {
       position: absolute;
-      bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -169,60 +168,62 @@
     }
     
     .swipe-track {
-      width: 200px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
+      width: 110px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 2rem;
       position: relative;
       pointer-events: auto;
+      box-shadow: 2px 2px 0 #00000050;
+    }
+    
+    .swipe-track::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 2rem;
+      transition: width 0.05s ease;
+    }
+    
+    .swipe-track.swipe-rtl::after {
+      right: 0;
+      width: var(--swipe-progress, 0%);
+    }
+    
+    .swipe-track.swipe-ltr::after {
+      left: 0;
+      width: var(--swipe-progress, 0%);
     }
     
     .swipe-thumb {
       position: absolute;
       top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background: #fff;
-      border-radius: 50%;
+      left: 90px; /* 110 - 40/2 = centered at right edge */
+      transform: translateY(-50%) rotate(90deg);
+      width: 2.5rem;
+      height: 2.5rem;
       cursor: grab;
-      transition: transform 0.1s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      animation: swipe-hint-left 1s ease-in-out infinite;
+    }
+    
+    .swipe-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     
     .swipe-thumb:active {
       cursor: grabbing;
-      transform: translateY(-50%) scale(1.1);
+      transform: translateY(-50%) rotate(90deg) scale(1.1);
     }
     
-    .swipe-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: bold;
-      text-shadow: 2px 2px #000;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .swipe-arrow {
-      animation: swipe-hint 1s ease-in-out infinite;
-    }
-    
-    @keyframes swipe-hint {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(-5px); }
-    }
-    
-    @keyframes swipe-hint-right {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(5px); }
-    }
-    
-    .swipe-arrow-right {
-      animation: swipe-hint-right 1s ease-in-out infinite;
+    @keyframes swipe-hint-left {
+      0%, 100% { transform: translateY(-50%) rotate(90deg) translateY(0); }
+      50% { transform: translateY(-50%) rotate(90deg) translateY(-3px); }
     }
     
     .canvas-4-section {
@@ -238,21 +239,30 @@
     .swipe-thumb-left {
       position: absolute;
       top: 50%;
-      left: 0;
-      right: auto;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background: #fff;
-      border-radius: 50%;
+      left: -20px; /* 0 - 40/2 = centered at left edge */
+      transform: translateY(-50%) rotate(-90deg);
+      width: 2.5rem;
+      height: 2.5rem;
       cursor: grab;
-      transition: transform 0.1s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      animation: swipe-hint-right 1s ease-in-out infinite;
+    }
+    
+    .swipe-thumb-left img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     
     .swipe-thumb-left:active {
       cursor: grabbing;
-      transform: translateY(-50%) scale(1.1);
+      transform: translateY(-50%) rotate(-90deg) scale(1.1);
+    }
+    
+    @keyframes swipe-hint-right {
+      0%, 100% { transform: translateY(-50%) rotate(-90deg) translateY(0); }
+      50% { transform: translateY(-50%) rotate(-90deg) translateY(-3px); }
     }
 
     .canvas-1-section {
@@ -300,7 +310,7 @@
       flex-direction: column;
       gap: 0.5rem;
       height: 100svh;
-      justify-content: end;
+      justify-content: center;
       align-items: center;
       padding-bottom: 2rem;
     }
@@ -626,10 +636,9 @@
     <div class="canvas-container">
       <canvas id="frame-yoga-to-karate-canvas"></canvas>
       <div class="swipe-dragger" id="yoga-swipe-dragger">
-        <div class="swipe-track" id="yoga-swipe-track">
-          <div class="swipe-thumb" id="yoga-swipe-thumb"></div>
+        <div class="swipe-track swipe-rtl" id="yoga-swipe-track">
+          <div class="swipe-thumb" id="yoga-swipe-thumb"><img src="/icons/scroll.svg" alt=""></div>
         </div>
-        <div class="swipe-label"><span class="swipe-arrow">&larr;</span> Swipe</div>
       </div>
       <div class="progress-circle" id="progress-circle-yoga">
         <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
@@ -646,10 +655,9 @@
     <div class="canvas-container">
       <canvas id="frame-canvas-4"></canvas>
       <div class="swipe-dragger" id="canvas4-swipe-dragger">
-        <div class="swipe-track" id="canvas4-swipe-track">
-          <div class="swipe-thumb-left" id="canvas4-swipe-thumb"></div>
+        <div class="swipe-track swipe-ltr" id="canvas4-swipe-track">
+          <div class="swipe-thumb-left" id="canvas4-swipe-thumb"><img src="/icons/scroll.svg" alt=""></div>
         </div>
-        <div class="swipe-label">Swipe <span class="swipe-arrow-right">&rarr;</span></div>
       </div>
       <div class="progress-circle" id="progress-circle-4">
         <svg viewBox="0 0 36 36"><circle class="progress-ring" cx="18" cy="18" r="16"></circle><circle class="progress-fill" cx="18" cy="18" r="16"></circle></svg>
@@ -1258,14 +1266,15 @@
     function setupYogaSwipe() {
       if (!yogaSwipeTrack || !yogaSwipeThumb) return;
       
-      const trackWidth = 200;
-      const thumbWidth = 24;
-      const maxOffset = trackWidth - thumbWidth;
+      const trackWidth = 110;
+      const thumbWidth = 40;
       
       function updateThumbPosition(progress) {
-        const offset = (1 - progress) * maxOffset;
+        // Thumb centered at progress bar edge
+        const offset = trackWidth * (1 - progress) - thumbWidth / 2;
         yogaSwipeThumb.style.right = 'auto';
         yogaSwipeThumb.style.left = offset + 'px';
+        yogaSwipeTrack.style.setProperty('--swipe-progress', (progress * 100) + '%');
       }
       
       function handleSwipeStart(e) {
@@ -1345,13 +1354,14 @@
     function setupCanvas4Swipe() {
       if (!canvas4SwipeTrack || !canvas4SwipeThumb) return;
       
-      const trackWidth = 200;
-      const thumbWidth = 24;
-      const maxOffset = trackWidth - thumbWidth;
-      
+      const trackWidth = 110;
+      const thumbWidth = 40;
+
       function updateThumbPosition(progress) {
-        const offset = progress * maxOffset;
+        // Thumb centered at progress bar edge
+        const offset = trackWidth * progress - thumbWidth / 2;
         canvas4SwipeThumb.style.left = offset + 'px';
+        canvas4SwipeTrack.style.setProperty('--swipe-progress', (progress * 100) + '%');
       }
       
       function handleSwipeStart(e) {
@@ -1892,9 +1902,10 @@
         yogaToKarateSection.style.display = 'block';
         if (yogaSwipeDragger) yogaSwipeDragger.style.display = 'flex';
         if (yogaSwipeThumb) {
-          yogaSwipeThumb.style.right = '0';
-          yogaSwipeThumb.style.left = 'auto';
+          yogaSwipeThumb.style.right = 'auto';
+          yogaSwipeThumb.style.left = '90px'; // 110 - 20 centered at right
         }
+        if (yogaSwipeTrack) yogaSwipeTrack.style.setProperty('--swipe-progress', '0%');
         window.scrollTo(0, yogaToKarateSection.offsetTop);
         maxScrollReached = yogaToKarateSection.offsetTop;
         startScrollingSound();
@@ -1918,7 +1929,8 @@
         drawFrame4(0);
         canvas4Section.style.display = 'block';
         if (canvas4SwipeDragger) canvas4SwipeDragger.style.display = 'flex';
-        if (canvas4SwipeThumb) canvas4SwipeThumb.style.left = '0';
+        if (canvas4SwipeThumb) canvas4SwipeThumb.style.left = '-20px'; // centered at left
+        if (canvas4SwipeTrack) canvas4SwipeTrack.style.setProperty('--swipe-progress', '0%');
         window.scrollTo(0, canvas4Section.offsetTop);
         maxScrollReached = canvas4Section.offsetTop;
         updateActiveMenuButton(5);
@@ -2073,16 +2085,18 @@
       // Reset yoga swipe UI
       if (yogaSwipeDragger) yogaSwipeDragger.style.display = 'flex';
       if (yogaSwipeThumb) {
-        yogaSwipeThumb.style.right = '0';
-        yogaSwipeThumb.style.left = 'auto';
+        yogaSwipeThumb.style.right = 'auto';
+        yogaSwipeThumb.style.left = '90px'; // 110 - 20 centered at right
       }
+      if (yogaSwipeTrack) yogaSwipeTrack.style.setProperty('--swipe-progress', '0%');
       yogaSwipeProgress = 0;
       
       // Reset canvas4 swipe UI
       if (canvas4SwipeDragger) canvas4SwipeDragger.style.display = 'flex';
       if (canvas4SwipeThumb) {
-        canvas4SwipeThumb.style.left = '0';
+        canvas4SwipeThumb.style.left = '-20px'; // 0 - 20 centered at left
       }
+      if (canvas4SwipeTrack) canvas4SwipeTrack.style.setProperty('--swipe-progress', '0%');
       canvas4SwipeProgress = 0;
       
       scene1Section.style.display = 'none';

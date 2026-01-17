@@ -1695,9 +1695,6 @@
           }
           
           targetFrame = Math.floor(sectionProgress * (FRAME_COUNT - 1));
-          if (targetFrame !== currentFrame && targetFrame >= 0 && targetFrame < FRAME_COUNT) {
-            drawFrame(targetFrame);
-          }
           updateCanvasProgress(1, sectionProgress);
           
           if (sectionProgress >= 0.98 && !scene2Played) {
@@ -1720,9 +1717,6 @@
           }
           
           targetFrame2 = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
-          if (targetFrame2 !== currentFrame2 && targetFrame2 >= 0 && targetFrame2 < FRAME_COUNT_2) {
-            drawFrame2(targetFrame2);
-          }
           updateCanvasProgress(2, sectionProgress2);
           
           if (sectionProgress2 >= 0.98 && !scene4Played) {
@@ -1745,9 +1739,6 @@
           }
           
           targetFrame3 = Math.floor(sectionProgress3 * (FRAME_COUNT_3 - 1));
-          if (targetFrame3 !== currentFrame3 && targetFrame3 >= 0 && targetFrame3 < FRAME_COUNT_3) {
-            drawFrame3(targetFrame3);
-          }
           updateCanvasProgress(3, sectionProgress3);
           
           if (sectionProgress3 >= 0.98 && !breathingScenePlayed) {
@@ -1790,9 +1781,6 @@
           }
           
           targetFrame5 = Math.floor(sectionProgress5 * (FRAME_COUNT_5 - 1));
-          if (targetFrame5 !== currentFrame5 && targetFrame5 >= 0 && targetFrame5 < FRAME_COUNT_5) {
-            drawFrame5(targetFrame5);
-          }
           updateCanvasProgress(5, sectionProgress5);
           
           if (sectionProgress5 >= 0.98 && !scene7Played) {
@@ -1822,9 +1810,6 @@
           }
           
           targetFrame6 = Math.floor(sectionProgress6 * (FRAME_COUNT_6 - 1));
-          if (targetFrame6 !== currentFrame6 && targetFrame6 >= 0 && targetFrame6 < FRAME_COUNT_6) {
-            drawFrame6(targetFrame6);
-          }
           updateCanvasProgress(6, sectionProgress6);
           
           if (sectionProgress6 >= 0.98) {

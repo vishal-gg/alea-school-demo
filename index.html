@@ -1708,8 +1708,9 @@
           var sectionHeight2 = canvas2Section.offsetHeight - window.innerHeight;
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
-          
-          if (!canvas2FirstScrollTriggered && sectionProgress2 > AUTO_COMPLETE_THRESHOLD) {
+
+          const AUTO_COMPLETE_THRESHOLD_CANVAS_2 = isAppleDevice ? 0.015 : 0.01;
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > AUTO_COMPLETE_THRESHOLD_CANVAS_2) {
             canvas2FirstScrollTriggered = true;
             const startFrame = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
             // Draw frames 0 through startFrame quickly before auto-animating

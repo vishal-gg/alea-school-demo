@@ -1683,7 +1683,7 @@
           var scrollInSection = scroll - sectionTop;
           var sectionProgress = Math.max(0, Math.min(1, scrollInSection / sectionHeight));
           
-          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01 && userHasScrolled) {
+          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01) {
             canvas1FirstScrollTriggered = true;
             animateCanvasToEnd(1, FRAME_COUNT, drawFrame, function() { playScene2(); });
             return;
@@ -1731,7 +1731,7 @@
           var scrollInSection3 = scroll - sectionTop3;
           var sectionProgress3 = Math.max(0, Math.min(1, scrollInSection3 / sectionHeight3));
           
-          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01 && userHasScrolled) {
+          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01) {
             canvas3FirstScrollTriggered = true;
             animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); });
             return;
@@ -1775,7 +1775,7 @@
           var scrollInSection5 = scroll - sectionTop5;
           var sectionProgress5 = Math.max(0, Math.min(1, scrollInSection5 / sectionHeight5));
           
-          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01 && userHasScrolled) {
+          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01) {
             canvas5FirstScrollTriggered = true;
             animateCanvasToEnd(5, FRAME_COUNT_5, drawFrame5, function() { playScene7(); });
             return;
@@ -1799,7 +1799,7 @@
           var scrollInSection6 = scroll - sectionTop6;
           var sectionProgress6 = Math.max(0, Math.min(1, scrollInSection6 / sectionHeight6));
           
-          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01 && userHasScrolled) {
+          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01) {
             canvas6FirstScrollTriggered = true;
             animateCanvasToEnd(6, FRAME_COUNT_6, drawFrame6, function() {
               if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';

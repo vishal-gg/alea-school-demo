@@ -885,44 +885,14 @@
     let lastBlurProgress = -1;
     let initialLoadingComplete = false;
 
-    // FIX: Improved scroll detection for iOS
-    // Only set userHasScrolled when there's actual scroll movement, not just touch
     let userHasScrolled = false;
-    let touchStartY = null;
-    let lastUserScrollTime = 0;
-    const SCROLL_COOLDOWN = 100; // ms to wait after programmatic scroll
-    
-    // Track touch start position
-    document.addEventListener('touchstart', function(e) {
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-    
-    // Only set userHasScrolled when there's actual vertical touch movement (scroll gesture)
-    document.addEventListener('touchmove', function(e) {
-      if (touchStartY !== null) {
-        const touchCurrentY = e.touches[0].clientY;
-        const deltaY = Math.abs(touchCurrentY - touchStartY);
-        // Require at least 15px of vertical movement to consider it a scroll
-        if (deltaY > 15) {
-          userHasScrolled = true;
-          lastUserScrollTime = Date.now();
-        }
-      }
-    }, { passive: true });
-    
-    document.addEventListener('touchend', function() {
-      touchStartY = null;
+    document.addEventListener('touchstart', function() {
+      userHasScrolled = true;
     }, { passive: true });
 
     document.addEventListener('wheel', function() {
       userHasScrolled = true;
-      lastUserScrollTime = Date.now();
     }, { passive: true });
-    
-    // Helper function to check if scroll is from user (not programmatic)
-    function isUserInitiatedScroll() {
-      return userHasScrolled && (Date.now() - lastUserScrollTime < SCROLL_COOLDOWN * 5);
-    }
 
     // Audio elements for frame sounds
     const frameSoundWhoose = new Audio('sfx/whoose.mp3');
@@ -1713,8 +1683,7 @@
           var scrollInSection = scroll - sectionTop;
           var sectionProgress = Math.max(0, Math.min(1, scrollInSection / sectionHeight));
           
-          // FIX: Use isUserInitiatedScroll() instead of just userHasScrolled
-          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01 && isUserInitiatedScroll()) {
+          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01 && userHasScrolled) {
             canvas1FirstScrollTriggered = true;
             animateCanvasToEnd(1, FRAME_COUNT, drawFrame, function() { playScene2(); });
             return;
@@ -1738,8 +1707,7 @@
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
           
-          // FIX: Use isUserInitiatedScroll() instead of just userHasScrolled
-          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01 && isUserInitiatedScroll()) {
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01 && userHasScrolled) {
             canvas2FirstScrollTriggered = true;
             animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
             return;
@@ -1763,8 +1731,7 @@
           var scrollInSection3 = scroll - sectionTop3;
           var sectionProgress3 = Math.max(0, Math.min(1, scrollInSection3 / sectionHeight3));
           
-          // FIX: Use isUserInitiatedScroll() instead of just userHasScrolled
-          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01 && isUserInitiatedScroll()) {
+          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01 && userHasScrolled) {
             canvas3FirstScrollTriggered = true;
             animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); });
             return;
@@ -1808,8 +1775,7 @@
           var scrollInSection5 = scroll - sectionTop5;
           var sectionProgress5 = Math.max(0, Math.min(1, scrollInSection5 / sectionHeight5));
           
-          // FIX: Use isUserInitiatedScroll() instead of just userHasScrolled
-          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01 && isUserInitiatedScroll()) {
+          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01 && userHasScrolled) {
             canvas5FirstScrollTriggered = true;
             animateCanvasToEnd(5, FRAME_COUNT_5, drawFrame5, function() { playScene7(); });
             return;
@@ -1833,8 +1799,7 @@
           var scrollInSection6 = scroll - sectionTop6;
           var sectionProgress6 = Math.max(0, Math.min(1, scrollInSection6 / sectionHeight6));
           
-          // FIX: Use isUserInitiatedScroll() instead of just userHasScrolled
-          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01 && isUserInitiatedScroll()) {
+          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01 && userHasScrolled) {
             canvas6FirstScrollTriggered = true;
             animateCanvasToEnd(6, FRAME_COUNT_6, drawFrame6, function() {
               if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';
@@ -1907,7 +1872,6 @@
       
       scene1Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         initLenis();
         scene1Section.style.display = 'none';
@@ -1931,7 +1895,6 @@
       scene2Video.play();
       scene2Video.addEventListener('ended', function() { 
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         startScrollingSound();
         playScene3(); 
       }, { once: true });
@@ -1947,7 +1910,6 @@
       scene3Video.play();
       scene3Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         scene3Section.style.display = 'none';
         drawFrame2(0);
@@ -1972,7 +1934,6 @@
       scene4Video.play();
       scene4Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         scene4Section.style.display = 'none';
         drawFrame3(0);
@@ -2025,7 +1986,6 @@
       scene5Video.play();
       scene5Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         scene5Section.style.display = 'none';
         drawFrame4(0);
@@ -2053,7 +2013,6 @@
       scene6Video.play();
       scene6Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         scene6Section.style.display = 'none';
         drawFrame5(0);
@@ -2078,7 +2037,6 @@
       scene7Video.play();
       scene7Video.addEventListener('ended', function() {
         userHasScrolled = false;
-        lastUserScrollTime = 0; // FIX: Also reset the timestamp
         document.body.classList.remove('no-scroll');
         scene7Section.style.display = 'none';
         drawFrame6(0);
@@ -2265,11 +2223,6 @@
       soundPlayedAtFrameGrass = false;
       soundPlayedAtFrameOutro = false;
       soundPlayedAtDojoToPot = false;
-      
-      // FIX: Reset scroll detection flags when switching scenes
-      userHasScrolled = false;
-      lastUserScrollTime = 0;
-      touchStartY = null;
       
       if (!lenis) initLenis();
       

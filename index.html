@@ -773,6 +773,7 @@
     const canvas2 = document.getElementById('frame-canvas-2');
     const ctx2 = canvas2.getContext('2d');
     const canvas2Section = document.getElementById('canvas-2-section');
+    const canvas2ScrollHint = canvas2Section.querySelector('.scroll-hint');
     const loader = document.getElementById('loader');
     const loaderFill = document.getElementById('loader-fill');
     const loaderPercentage = document.getElementById("loader-percentage");
@@ -1713,6 +1714,7 @@
           
           if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01 && userHasScrolled) {
             canvas2FirstScrollTriggered = true;
+            if (canvas2ScrollHint) canvas2ScrollHint.style.display = 'none';
             animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
             return;
           }
@@ -1918,6 +1920,7 @@
         scene3Section.style.display = 'none';
         drawFrame2(0);
         canvas2Section.style.display = 'block';
+        if (canvas2ScrollHint) canvas2ScrollHint.style.display = 'block';
         window.scrollTo(0, canvas2Section.offsetTop);
         maxScrollReached = canvas2Section.offsetTop;
         updateActiveMenuButton(3);
@@ -2278,6 +2281,7 @@
               scene3Section.style.display = 'none';
               canvas2Section.style.display = 'block';
               drawFrame2(0);
+              if (canvas2ScrollHint) canvas2ScrollHint.style.display = 'block';
               if (lenis) lenis.scrollTo(canvas2Section.offsetTop, { immediate: true });
               else window.scrollTo(0, canvas2Section.offsetTop);
               maxScrollReached = canvas2Section.offsetTop;
@@ -2300,6 +2304,7 @@
             scene3Section.style.display = 'none';
             canvas2Section.style.display = 'block';
             drawFrame2(0);
+            if (canvas2ScrollHint) canvas2ScrollHint.style.display = 'block';
             if (lenis) lenis.scrollTo(canvas2Section.offsetTop, { immediate: true });
             else window.scrollTo(0, canvas2Section.offsetTop);
             maxScrollReached = canvas2Section.offsetTop;

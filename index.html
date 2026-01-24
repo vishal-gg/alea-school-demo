@@ -729,7 +729,7 @@
   </section>
 
   <div style="position: fixed; bottom: 0; left: 0; z-index: 99;">
-    <span>attempt #3</span>
+    <span>attempt #3.1</span>
   </div>
   
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -1873,6 +1873,20 @@
           warmingUpVideos.delete(video);
         }).catch(function() {
           warmingUpVideos.delete(video);
+        });
+      });
+      
+      // Warm up audio elements for iOS
+      var audiosToWarm = [frameSoundWhoose, frameSoundSunTransition, frameSoundBreath, frameSoundGrass, frameSoundOutro, frameSoundDojoToPot, scrollingSound];
+      audiosToWarm.forEach(function(audio) {
+        var originalVolume = audio.volume;
+        audio.volume = 0;
+        audio.play().then(function() {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.volume = originalVolume;
+        }).catch(function(err) {
+          console.log('Audio warmup failed:', err);
         });
       });
       

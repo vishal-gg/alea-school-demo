@@ -885,6 +885,15 @@
     let lastBlurProgress = -1;
     let initialLoadingComplete = false;
 
+    let userHasScrolled = false;
+    document.addEventListener('touchstart', function() {
+      userHasScrolled = true;
+    }, { passive: true });
+
+    document.addEventListener('wheel', function() {
+      userHasScrolled = true;
+    }, { passive: true });
+
     // Audio elements for frame sounds
     const frameSoundWhoose = new Audio('sfx/whoose.mp3');
     const frameSoundSunTransition = new Audio('sfx/basket-ball-to-arieal.mp3');
@@ -1698,7 +1707,7 @@
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
           
-          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01) {
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01 && userHasScrolled) {
             canvas2FirstScrollTriggered = true;
             animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
             return;
@@ -1862,6 +1871,7 @@
       });
       
       scene1Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         initLenis();
         scene1Section.style.display = 'none';
@@ -1884,6 +1894,7 @@
       stopScrollingSound();
       scene2Video.play();
       scene2Video.addEventListener('ended', function() { 
+        userHasScrolled = false;
         startScrollingSound();
         playScene3(); 
       }, { once: true });
@@ -1898,6 +1909,7 @@
       stopScrollingSound();
       scene3Video.play();
       scene3Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         scene3Section.style.display = 'none';
         drawFrame2(0);
@@ -1921,6 +1933,7 @@
       stopScrollingSound();
       scene4Video.play();
       scene4Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         scene4Section.style.display = 'none';
         drawFrame3(0);
@@ -1972,6 +1985,7 @@
       stopScrollingSound();
       scene5Video.play();
       scene5Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         scene5Section.style.display = 'none';
         drawFrame4(0);
@@ -1998,6 +2012,7 @@
       stopScrollingSound();
       scene6Video.play();
       scene6Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         scene6Section.style.display = 'none';
         drawFrame5(0);
@@ -2021,6 +2036,7 @@
       stopScrollingSound();
       scene7Video.play();
       scene7Video.addEventListener('ended', function() {
+        userHasScrolled = false;
         document.body.classList.remove('no-scroll');
         scene7Section.style.display = 'none';
         drawFrame6(0);

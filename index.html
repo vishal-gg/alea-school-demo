@@ -1698,7 +1698,7 @@
           var scrollInSection2 = scroll - sectionTop2;
           var sectionProgress2 = Math.max(0, Math.min(1, scrollInSection2 / sectionHeight2));
           
-          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.05) {
+          if (!canvas2FirstScrollTriggered && sectionProgress2 > 0.01) {
             canvas2FirstScrollTriggered = true;
             animateCanvasToEnd(2, FRAME_COUNT_2, drawFrame2, function() { playScene4(); });
             return;
@@ -1890,23 +1890,24 @@
     }
 
     function playScene3() {
-        scene2Section.style.display = 'none';
-        scene3Section.style.display = 'flex';
-        scene3Section.classList.remove('paused');
-        window.scrollTo(0, scene3Section.offsetTop);
+      scene2Section.style.display = 'none';
+      scene3Section.style.display = 'flex';
+      scene3Section.classList.remove('paused');
+      window.scrollTo(0, scene3Section.offsetTop);
+      updateActiveMenuButton(3);
+      stopScrollingSound();
+      scene3Video.play();
+      scene3Video.addEventListener('ended', function() {
+        document.body.classList.remove('no-scroll');
+        scene3Section.style.display = 'none';
+        drawFrame2(0);
+        canvas2Section.style.display = 'block';
+        window.scrollTo(0, canvas2Section.offsetTop);
+        maxScrollReached = canvas2Section.offsetTop;
         updateActiveMenuButton(3);
-        stopScrollingSound();
-        scene3Video.play();
-        scene3Video.addEventListener('ended', function () {
-          document.body.classList.remove('no-scroll');
-          scene3Section.style.display = 'none';
-          drawFrame2(0);
-          canvas2Section.style.display = 'block';
-          window.scrollTo(0, canvas2Section.offsetTop);  // ← Sets scroll position
-          maxScrollReached = canvas2Section.offsetTop;
-          startScrollingSound();
-        }, { once: true });
-      }
+        startScrollingSound();
+      }, { once: true });
+    }
 
     function playScene4() {
       if (scene4Played) return;

@@ -1683,21 +1683,21 @@
           var scrollInSection = scroll - sectionTop;
           var sectionProgress = Math.max(0, Math.min(1, scrollInSection / sectionHeight));
           
-          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01) {
+          if (!canvas1FirstScrollTriggered && sectionProgress > 0.01 && userHasScrolled) {
             canvas1FirstScrollTriggered = true;
             animateCanvasToEnd(1, FRAME_COUNT, drawFrame, function() { playScene2(); });
             return;
           }
           
-          targetFrame = Math.floor(sectionProgress * (FRAME_COUNT - 1));
-          if (targetFrame !== currentFrame && targetFrame >= 0 && targetFrame < FRAME_COUNT) {
-            drawFrame(targetFrame);
-          }
-          updateCanvasProgress(1, sectionProgress);
+          // targetFrame = Math.floor(sectionProgress * (FRAME_COUNT - 1));
+          // if (targetFrame !== currentFrame && targetFrame >= 0 && targetFrame < FRAME_COUNT) {
+          //   drawFrame(targetFrame);
+          // }
+          // updateCanvasProgress(1, sectionProgress);
           
-          if (sectionProgress >= 0.98 && !scene2Played) {
-            playScene2();
-          }
+          // if (sectionProgress >= 0.98 && !scene2Played) {
+          //   playScene2();
+          // }
         }
 
         // CANVAS-2: Auto-complete on first scroll
@@ -1713,15 +1713,15 @@
             return;
           }
           
-          targetFrame2 = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
-          if (targetFrame2 !== currentFrame2 && targetFrame2 >= 0 && targetFrame2 < FRAME_COUNT_2) {
-            drawFrame2(targetFrame2);
-          }
-          updateCanvasProgress(2, sectionProgress2);
+          // targetFrame2 = Math.floor(sectionProgress2 * (FRAME_COUNT_2 - 1));
+          // if (targetFrame2 !== currentFrame2 && targetFrame2 >= 0 && targetFrame2 < FRAME_COUNT_2) {
+          //   drawFrame2(targetFrame2);
+          // }
+          // updateCanvasProgress(2, sectionProgress2);
           
-          if (sectionProgress2 >= 0.98 && !scene4Played) {
-            playScene4();
-          }
+          // if (sectionProgress2 >= 0.98 && !scene4Played) {
+          //   playScene4();
+          // }
         }
 
         // CANVAS-3: Auto-complete on first scroll
@@ -1731,21 +1731,21 @@
           var scrollInSection3 = scroll - sectionTop3;
           var sectionProgress3 = Math.max(0, Math.min(1, scrollInSection3 / sectionHeight3));
           
-          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01) {
+          if (!canvas3FirstScrollTriggered && sectionProgress3 > 0.01 && userHasScrolled) {
             canvas3FirstScrollTriggered = true;
             animateCanvasToEnd(3, FRAME_COUNT_3, drawFrame3, function() { playBreathingScene(); });
             return;
           }
           
-          targetFrame3 = Math.floor(sectionProgress3 * (FRAME_COUNT_3 - 1));
-          if (targetFrame3 !== currentFrame3 && targetFrame3 >= 0 && targetFrame3 < FRAME_COUNT_3) {
-            drawFrame3(targetFrame3);
-          }
-          updateCanvasProgress(3, sectionProgress3);
+          // targetFrame3 = Math.floor(sectionProgress3 * (FRAME_COUNT_3 - 1));
+          // if (targetFrame3 !== currentFrame3 && targetFrame3 >= 0 && targetFrame3 < FRAME_COUNT_3) {
+          //   drawFrame3(targetFrame3);
+          // }
+          // updateCanvasProgress(3, sectionProgress3);
           
-          if (sectionProgress3 >= 0.98 && !breathingScenePlayed) {
-            playBreathingScene();
-          }
+          // if (sectionProgress3 >= 0.98 && !breathingScenePlayed) {
+          //   playBreathingScene();
+          // }
         }
 
         // YOGA-TO-KARATE CANVAS: Handled by swipe, lock scroll position only when at this section
@@ -1775,21 +1775,21 @@
           var scrollInSection5 = scroll - sectionTop5;
           var sectionProgress5 = Math.max(0, Math.min(1, scrollInSection5 / sectionHeight5));
           
-          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01) {
+          if (!canvas5FirstScrollTriggered && sectionProgress5 > 0.01 && userHasScrolled) {
             canvas5FirstScrollTriggered = true;
             animateCanvasToEnd(5, FRAME_COUNT_5, drawFrame5, function() { playScene7(); });
             return;
           }
           
-          targetFrame5 = Math.floor(sectionProgress5 * (FRAME_COUNT_5 - 1));
-          if (targetFrame5 !== currentFrame5 && targetFrame5 >= 0 && targetFrame5 < FRAME_COUNT_5) {
-            drawFrame5(targetFrame5);
-          }
-          updateCanvasProgress(5, sectionProgress5);
+          // targetFrame5 = Math.floor(sectionProgress5 * (FRAME_COUNT_5 - 1));
+          // if (targetFrame5 !== currentFrame5 && targetFrame5 >= 0 && targetFrame5 < FRAME_COUNT_5) {
+          //   drawFrame5(targetFrame5);
+          // }
+          // updateCanvasProgress(5, sectionProgress5);
           
-          if (sectionProgress5 >= 0.98 && !scene7Played) {
-            playScene7();
-          }
+          // if (sectionProgress5 >= 0.98 && !scene7Played) {
+          //   playScene7();
+          // }
         }
 
         // CANVAS-6: Auto-complete on first scroll
@@ -1799,7 +1799,7 @@
           var scrollInSection6 = scroll - sectionTop6;
           var sectionProgress6 = Math.max(0, Math.min(1, scrollInSection6 / sectionHeight6));
           
-          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01) {
+          if (!canvas6FirstScrollTriggered && sectionProgress6 > 0.01 && userHasScrolled) {
             canvas6FirstScrollTriggered = true;
             animateCanvasToEnd(6, FRAME_COUNT_6, drawFrame6, function() {
               if (canvas6ScrollHint) canvas6ScrollHint.style.display = 'none';
@@ -1812,11 +1812,11 @@
             return;
           }
           
-          targetFrame6 = Math.floor(sectionProgress6 * (FRAME_COUNT_6 - 1));
-          if (targetFrame6 !== currentFrame6 && targetFrame6 >= 0 && targetFrame6 < FRAME_COUNT_6) {
-            drawFrame6(targetFrame6);
-          }
-          updateCanvasProgress(6, sectionProgress6);
+          // targetFrame6 = Math.floor(sectionProgress6 * (FRAME_COUNT_6 - 1));
+          // if (targetFrame6 !== currentFrame6 && targetFrame6 >= 0 && targetFrame6 < FRAME_COUNT_6) {
+          //   drawFrame6(targetFrame6);
+          // }
+          // updateCanvasProgress(6, sectionProgress6);
           
           if (sectionProgress6 >= 0.98) {
             if (!canvas6Finished) {
